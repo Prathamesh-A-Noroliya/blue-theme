@@ -6,17 +6,17 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recha
 import { useLanguage } from "@/context/LanguageContext";
 import { getHealthColor, getRiskColor } from "@/lib/utils";
 
-function StatCard({ label, value, icon: Icon, gradient, sub }: { label: string; value: string | number; icon: React.ElementType; gradient: string; sub?: string }) {
+function StatCard({ label, value, icon: Icon, sub }: { label: string; value: string | number; icon: React.ElementType; sub?: string }) {
   return (
-    <div className={`p-5 rounded-2xl text-white ${gradient}`}>
+    <div className="p-5 rounded-2xl bg-slate-800/60 border border-blue-500/20">
       <div className="flex items-start justify-between mb-3">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/20">
-          <Icon className="w-5 h-5 text-white" />
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-blue-500/20">
+          <Icon className="w-5 h-5 text-blue-400" />
         </div>
       </div>
-      <div className="text-2xl font-bold mb-0.5" style={{ fontFamily: "Sora, sans-serif" }}>{value}</div>
-      <div className="text-sm font-medium">{label}</div>
-      {sub && <div className="text-xs mt-1 text-white/70">{sub}</div>}
+      <div className="text-2xl font-bold mb-0.5 text-white" style={{ fontFamily: "Sora, sans-serif" }}>{value}</div>
+      <div className="text-sm font-medium text-blue-300">{label}</div>
+      {sub && <div className="text-xs mt-1 text-blue-400/70">{sub}</div>}
     </div>
   );
 }
@@ -53,7 +53,7 @@ export default function Dashboard() {
   return (
     <div className="p-6 space-y-6">
       {/* Header banner */}
-      <div className="p-6 rounded-2xl" style={{ background: "linear-gradient(135deg, #0B1F3A 0%, #0EA5A4 100%)" }}>
+      <div className="p-6 rounded-2xl bg-gradient-to-r from-blue-900 to-slate-800 border border-blue-500/30">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -61,22 +61,18 @@ export default function Dashboard() {
               <span className="text-xs font-medium text-white/70">{t("pilot_label")}</span>
             </div>
             <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "Sora, sans-serif" }}>RoadIntel — Pune Road Safety Intelligence Platform</h1>
-            <p className="text-sm mt-1 text-white/70">Pilot Phase | Pune Metropolitan Zone | Powered by real-time sensor & complaint data</p>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-xl shrink-0" style={{ background: "rgba(255,255,255,0.1)" }}>
-            <Activity className="w-4 h-4 text-white" />
-            <span className="text-sm text-white font-medium">System Online</span>
+            <p className="text-sm mt-1 text-white/70">Pilot Phase | Pune Metropolitan Zone | May 2026</p>
           </div>
         </div>
       </div>
 
       {/* Stats grid */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <StatCard label={t("dashboard_complaints")} value={stats.complaints} icon={FileText} gradient="bg-gradient-to-br from-blue-500 to-blue-700" sub={t("pilot_label")} />
-        <StatCard label="Active Issues" value={stats.activeIssues} icon={AlertTriangle} gradient="bg-gradient-to-br from-red-500 to-rose-700" />
-        <StatCard label="Roads Monitored" value={stats.roadsMonitored} icon={Map} gradient="bg-gradient-to-br from-green-500 to-emerald-700" />
-        <StatCard label={t("dashboard_sensors")} value={`${stats.anomalies} today`} icon={Radio} gradient="bg-gradient-to-br from-indigo-500 to-indigo-700" />
-        <StatCard label="Avg Health Score" value={`${stats.avgHealth}/100`} icon={Activity} gradient="bg-gradient-to-br from-purple-500 to-purple-700" />
+        <StatCard label={t("dashboard_complaints")} value={stats.complaints} icon={FileText} sub={t("pilot_label")} />
+        <StatCard label="Active Issues" value={stats.activeIssues} icon={AlertTriangle} />
+        <StatCard label="Roads Monitored" value={stats.roadsMonitored} icon={Map} />
+        <StatCard label={t("dashboard_sensors")} value={`${stats.anomalies} today`} icon={Radio} />
+        <StatCard label="Avg Health Score" value={`${stats.avgHealth}/100`} icon={Activity} />
       </div>
 
       {/* Monthly complaints chart */}

@@ -31,7 +31,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-900 via-blue-700 to-indigo-600">
       <div className="relative w-full max-w-md">
-        <div className="p-8 rounded-2xl bg-white/10 backdrop-blur border border-white/20">
+        <div className="p-8 rounded-2xl bg-slate-800/50 backdrop-blur border border-blue-400/20">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-teal-400 to-blue-400">
               <Shield className="w-5 h-5 text-white" />

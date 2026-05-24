@@ -9,25 +9,23 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import { ChatbotPanel } from "@/components/chatbot-panel";
 
-const navItems = [
+const navItems: { key: string; href: string; icon: React.ElementType; group: string; badge?: string }[] = [
   { key: "nav_dashboard", href: "/dashboard", icon: LayoutDashboard, group: "main" },
   { key: "nav_complaints", href: "/complaints", icon: FileText, group: "main" },
   { key: "nav_scan", href: "/scan", icon: Scan, group: "main" },
-  { key: "nav_assistant", href: "/assistant", icon: Bot, group: "main", badge: "AI" },
+  { key: "nav_assistant", href: "/assistant", icon: Bot, group: "main" },
   { key: "nav_roads", href: "/roads", icon: Map, group: "intel" },
   { key: "nav_riskmap", href: "/risk-map", icon: TrendingDown, group: "intel" },
   { key: "nav_spending", href: "/spending", icon: Wallet, group: "intel" },
-  { key: "nav_sensors", href: "/sensors", icon: Radio, group: "intel", badge: "LIVE" },
+  { key: "nav_sensors", href: "/sensors", icon: Radio, group: "intel" },
   { key: "nav_contractors", href: "/contractors", icon: Users, group: "intel" },
   { key: "nav_analytics", href: "/analytics", icon: BarChart3, group: "intel" },
-  { key: "nav_sos", href: "/sos", icon: Siren, group: "emergency", badge: "SOS" },
+  { key: "nav_sos", href: "/sos", icon: Siren, group: "emergency" },
   { key: "nav_subscribe", href: "/subscribe", icon: CreditCard, group: "account" },
   { key: "nav_settings", href: "/settings", icon: Settings, group: "account" },
 ];
 
 const BADGE_COLORS: Record<string, { bg: string; color: string }> = {
-  LIVE: { bg: "rgba(22,163,74,0.2)", color: "#16A34A" },
-  AI: { bg: "rgba(124,58,237,0.2)", color: "#7C3AED" },
   SOS: { bg: "rgba(229,57,53,0.2)", color: "#E53935" },
 };
 
@@ -69,7 +67,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden">
+    <div className="flex h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 overflow-hidden">
       {/* Sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 w-64 flex flex-col transition-transform duration-300 lg:relative lg:translate-x-0 bg-gradient-to-b from-blue-900 via-blue-800 to-indigo-900 text-white ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
