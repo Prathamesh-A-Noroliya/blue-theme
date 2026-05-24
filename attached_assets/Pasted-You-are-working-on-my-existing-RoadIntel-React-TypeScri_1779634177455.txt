@@ -1,0 +1,230 @@
+You are working on my existing RoadIntel React/TypeScript website.
+DO NOT rebuild from scratch. Inspect first, edit minimally.
+Complete everything in ONE session efficiently.
+
+═══════════════════════════════════════
+STEP 0 — INSPECT FIRST
+═══════════════════════════════════════
+Run: find src/ -type f
+Read: App.tsx, main.tsx, any router file, sidebar, header, settings page
+List all files found then proceed immediately.
+
+═══════════════════════════════════════
+STEP 1 — LOGIN PAGE + AUTH SYSTEM
+═══════════════════════════════════════
+Create src/context/AuthContext.tsx:
+- States: isLoggedIn, isGuest, user {name, email, role}
+- Functions: login(email, password), loginAsGuest(), logout()
+- Save auth state to localStorage "roadintel_auth"
+- Load on startup
+
+Create src/pages/LoginPage.tsx:
+- Clean gradient background: from-blue-900 via-blue-700 to-indigo-600
+- Center card with:
+  - "RoadIntel" logo text + road shield icon (use lucide-react)
+  - Subtitle: "Pune Road Safety Intelligence Platform"
+  - Small badge: "Pilot Phase — May 2026"
+  - Email + Password fields
+  - "Sign In" button → validates non-empty → sets isLoggedIn true
+  - Divider: "or"
+  - "Continue as Guest" button → loginAsGuest() → enters with limited label
+  - Demo credentials shown subtly: admin@roadintel.in / demo1234
+- No backend needed — just validate demo credentials or any non-empty input
+- On success → redirect to /dashboard
+
+Update App.tsx routing:
+- If not logged in → show LoginPage
+- If logged in or guest → show main app
+- Protect all routes
+
+═══════════════════════════════════════
+STEP 2 — SIGN OUT IN SETTINGS
+═══════════════════════════════════════
+Edit Settings page ONLY:
+- Add "Sign Out" section at bottom of settings page
+- Red outlined button: "Sign Out"
+- On click → call logout() from AuthContext
+  → clear localStorage "roadintel_auth"
+  → redirect to login page
+- If user is guest show label: "Signed in as Guest"
+- If logged in show: user email from auth state
+
+═══════════════════════════════════════
+STEP 3 — GRADIENT THEME ACROSS WEBSITE
+═══════════════════════════════════════
+Apply gradients using Tailwind only — no new CSS files needed.
+Edit only layout/sidebar/header components:
+
+SIDEBAR:
+- Background: bg-gradient-to-b from-blue-900 via-blue-800 to-indigo-900
+- Text: text-white
+- Active nav item: bg-white/20 rounded-lg
+- Logo text: text-white font-bold text-xl
+- "Pilot v1.0" badge at bottom: text-blue-300 text-xs
+
+HEADER/TOPBAR:
+- Background: bg-gradient-to-r from-blue-800 to-indigo-700
+- Text and icons: text-white
+
+DASHBOARD STAT CARDS (edit dashboard page):
+- Card 1 Complaints: bg-gradient-to-br from-blue-500 to-blue-700 text-white
+- Card 2 Sensors: bg-gradient-to-br from-indigo-500 to-indigo-700 text-white
+- Card 3 Risk Zones: bg-gradient-to-br from-red-500 to-rose-700 text-white
+- Card 4 Resolved: bg-gradient-to-br from-green-500 to-emerald-700 text-white
+- Card 5 Budget: bg-gradient-to-br from-purple-500 to-purple-700 text-white
+
+PAGE BACKGROUND:
+- Main content area: bg-gradient-to-br from-slate-50 to-blue-50 (light mode)
+- Dark mode: bg-gradient-to-br from-gray-900 to-blue-950
+
+BUTTONS (primary):
+- bg-gradient-to-r from-blue-600 to-indigo-600 text-white
+- hover: from-blue-700 to-indigo-700
+
+LOGIN PAGE:
+- Full page: bg-gradient-to-br from-blue-900 via-blue-700 to-indigo-600
+- Card: bg-white/10 backdrop-blur border border-white/20 rounded-2xl
+- Input fields: bg-white/20 border-white/30 text-white placeholder-white/60
+- Sign In button: bg-gradient-to-r from-white to-blue-100 text-blue-900
+- Guest button: border-white/50 text-white hover:bg-white/10
+
+═══════════════════════════════════════
+STEP 4 — DATA CLEANUP
+═══════════════════════════════════════
+Replace ALL data with small realistic Pune/Maharashtra dataset:
+
+ACCIDENTS (6):
+Katraj Ghat Pune | 12 incidents | Critical
+Hadapsar Junction | 8 incidents | High
+NH-48 near Khopoli | 15 incidents | Critical
+Swargate Circle | 5 incidents | Medium
+Nashik Phata Pimpri | 9 incidents | High
+Mumbai-Pune Expressway KM 42 | 11 incidents | High
+
+COMPLAINTS (5):
+FC Road Goodluck Chowk | Pothole | Pending
+Baner Road Balewadi | Broken Divider | In Progress
+Katraj-Kondhwa | Missing Signage | Resolved
+Swargate underpass | Waterlogging | Pending
+Expressway KM 55 | Damaged Guardrail | In Progress
+
+SENSORS (5):
+S-01 Katraj Tunnel | Active
+S-02 Hadapsar Junction | Offline
+S-03 NH-48 Khopoli | Active
+S-04 Baner Road | Active
+S-05 Nashik Phata | Maintenance
+
+DASHBOARD STATS:
+Complaints: 847 | Sensors: 12/15
+Risk Zones: 6 | Resolved: 234 this month
+Budget: ₹2.3Cr of ₹5Cr
+
+Replace all "2025" with "May 2026" across all files.
+Add "Pune Pilot Zone" badge near all stat displays.
+
+═══════════════════════════════════════
+STEP 5 — TRANSLATION SYSTEM
+═══════════════════════════════════════
+Create src/context/LanguageContext.tsx:
+- en, hi, mr only
+- useLanguage(), t("key")
+- localStorage key: "roadintel_lang"
+
+Create src/translations.ts:
+nav_dashboard: Dashboard / डैशबोर्ड / डॅशबोर्ड
+nav_complaints: Complaints / शिकायतें / तक्रारी
+nav_sensors: Sensors / सेंसर / सेन्सर
+nav_riskmap: Risk Map / जोखिम मानचित्र / धोका नकाशा
+nav_settings: Settings / सेटिंग्स / सेटिंग्ज
+nav_contractors: Contractors / ठेकेदार / कंत्राटदार
+btn_save: Save / सहेजें / जतन करा
+btn_cancel: Cancel / रद्द करें / रद्द करा
+btn_view: View / देखें / पाहा
+btn_search: Search / खोजें / शोधा
+btn_markread: Mark all as read / सभी पढ़ें / सर्व वाचले
+btn_signout: Sign Out / साइन आउट / साइन आउट
+btn_signin: Sign In / साइन इन / साइन इन
+btn_guest: Continue as Guest / अतिथि के रूप में / पाहुणे म्हणून
+lbl_status: Status / स्थिति / स्थिती
+lbl_location: Location / स्थान / ठिकाण
+lbl_risk: Risk Level / जोखिम स्तर / धोका पातळी
+lbl_pending: Pending / लंबित / प्रलंबित
+lbl_resolved: Resolved / हल किया / निराकरण
+lbl_active: Active / सक्रिय / सक्रिय
+lbl_offline: Offline / ऑफलाइन / ऑफलाइन
+lbl_critical: Critical / गंभीर / गंभीर
+lbl_high: High / उच्च / उच्च
+lbl_medium: Medium / मध्यम / मध्यम
+settings_save_success: Profile saved / प्रोफ़ाइल सहेजी / प्रोफाइल जतन
+settings_signout_label: Signed in as / इस रूप में / म्हणून लॉगिन
+notif_title: Notifications / सूचनाएं / सूचना
+pilot_label: Pune Pilot Zone / पुणे पायलट जोन / पुणे पायलट झोन
+
+Wrap App in LanguageProvider.
+Apply t("key") to sidebar, header, page titles, buttons minimum.
+
+═══════════════════════════════════════
+STEP 6 — SETTINGS + NOTIFICATIONS FIX
+═══════════════════════════════════════
+Settings page:
+- Save Profile → localStorage "roadintel_profile" → green success 3s
+- Theme toggle → dark class on html element → persist localStorage
+- Language: English/Hindi/Marathi only → setLanguage()
+- Sign Out section at bottom with red button
+- Show current user email or "Guest User"
+- Startup: apply saved theme + language in App.tsx or main.tsx
+
+Notification bell in header:
+- 4 notifications:
+  "Pothole complaint — FC Road, Pune" | 2 min ago
+  "Sensor S-02 offline — Hadapsar Junction" | 1 hr ago
+  "Risk alert — NH-48 Khopoli" | 3 hrs ago
+  "Report submitted — Swargate flyover" | Yesterday
+- Red badge "4"
+- Mark all as read → clears badge
+- Click outside → closes
+
+═══════════════════════════════════════
+STEP 7 — MOBILE + WORDING
+═══════════════════════════════════════
+Mobile fixes (Tailwind only):
+- Sidebar hamburger on < 768px
+- Cards: flex-col on mobile
+- Tables: overflow-x-auto
+- Min tap target 44px
+- No horizontal scroll at 375px
+
+Wording fixes:
+- Remove all lorem ipsum, placeholder, "coming soon"
+- Remove all "2025" → replace with "May 2026"
+- Remove all national/hackathon mentions
+- Replace fake claims with: "Pilot Phase", "Demo Zone", "Sample Data"
+- Dashboard title: "RoadIntel — Pune Road Safety Intelligence"
+- Subtitle: "Pilot Phase | Pune Metropolitan Zone | May 2026"
+
+═══════════════════════════════════════
+STEP 8 — BUILD + VERIFY
+═══════════════════════════════════════
+- Run: npm run build
+- Fix ALL errors
+- Confirm:
+  ✓ Login page renders with gradient
+  ✓ Guest access works
+  ✓ Protected routes redirect to login
+  ✓ Sign out works from settings
+  ✓ Gradients visible on sidebar, header, cards
+  ✓ Bell notifications work
+  ✓ Settings save/theme/language all persist
+  ✓ No 2025 left anywhere
+  ✓ Mobile works at 375px
+  ✓ Build passes with zero errors
+- Print: files changed + what was fixed
+
+RULES:
+1. Inspect before editing
+2. No new npm packages
+3. No duplicate components
+4. Minimum edits per file
+5. Build must pass
+6. Use minimum tokens — be concise in code
