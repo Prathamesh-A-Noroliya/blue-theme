@@ -1,0 +1,97 @@
+You are working on my existing RoadIntel React/TypeScript website.
+This website will be presented at a National Road Safety Hackathon at IIT Madras.
+It must look like a serious, well-built MVP — not a demo or vibe-coded project.
+Do NOT rebuild from scratch. Inspect first, then make targeted edits only.
+
+---
+
+INSPECT FIRST — NO EDITS YET
+- List all files in src/
+- Read: App.tsx, main.tsx, layout/sidebar, any context files
+- Read: all page components, data/constants files, any existing translation files
+- Summarize routes, components, data files, context providers
+- Then begin passes below
+
+---
+
+PASS 1 — CODE QUALITY CLEANUP
+- Remove unused imports, variables, console.logs, dead code
+- Fix any obvious TypeScript errors
+- Do not restructure or rename anything
+- Only touch files with real problems
+
+---
+
+PASS 2 — REPLACE ALL DATA WITH REALISTIC PUNE/MAHARASHTRA PILOT DATA
+
+This is critical for hackathon credibility. Replace all fake/generic data with:
+
+ACCIDENT DATA (max 6 records):
+- Katraj Ghat, Pune — 12 incidents (Jan–Mar 2024), High Risk
+- Hadapsar Junction, Pune — 8 incidents, Medium Risk  
+- NH-48 near Khopoli — 15 incidents, Critical
+- Swargate Circle, Pune — 5 incidents, Medium Risk
+- Nashik Phata, Pimpri — 9 incidents, High Risk
+- Mumbai-Pune Expressway KM 42 — 11 incidents, High Risk
+
+COMPLAINTS DATA (max 5 records):
+- Pothole complaint: FC Road near Goodluck Chowk — Pending
+- Broken divider: Baner Road near Balewadi — In Progress
+- Missing signage: Katraj–Kondhwa stretch — Resolved
+- Waterlogging: Swargate underpass — Pending
+- Damaged guardrail: Expressway KM 55 — In Progress
+
+SENSORS DATA (max 5 records):
+- Sensor S-01: Katraj Tunnel entrance — Active
+- Sensor S-02: Hadapsar Junction — Offline
+- Sensor S-03: NH-48 Khopoli — Active
+- Sensor S-04: Baner Road — Active  
+- Sensor S-05: Nashik Phata — Maintenance
+
+CONTRACTORS (max 4):
+- Pune Municipal Corporation (PMC) Road Dept
+- Maharashtra State Road Development Corporation (MSRDC)
+- National Highways Authority of India (NHAI) — Pune Zone
+- PWD Maharashtra — Pune Division
+
+DASHBOARD STATS:
+- Total Complaints: 847 (Pune Pilot Zone)
+- Active Sensors: 12 of 15
+- High Risk Zones: 6
+- Resolved Issues: 234 this month
+- Budget Utilized: ₹2.3 Cr of ₹5 Cr
+
+Use labels: "Pune Pilot Zone", "Maharashtra Demo View", "Sample Data — Pilot Phase"
+Keep all place names real and believable.
+
+---
+
+PASS 3 — LANGUAGE TRANSLATION SYSTEM
+
+Create src/context/LanguageContext.tsx:
+- Languages: English (en), Hindi (hi), Marathi (mr) ONLY
+- Export LanguageProvider, useLanguage hook, t("key") function
+- Save to localStorage key: "roadintel_lang"
+- Load from localStorage on startup
+
+Create src/translations.ts with these keys translated in all 3 languages:
+
+nav_dashboard, nav_complaints, nav_sensors, nav_riskmap, 
+nav_contractors, nav_spending, nav_settings, nav_reports,
+page_title_dashboard, page_title_complaints, page_title_sensors,
+page_title_riskmap, page_title_settings,
+btn_save, btn_cancel, btn_view, btn_update, btn_apply, 
+btn_search, btn_submit, btn_export, btn_markread,
+lbl_status, lbl_location, lbl_risk, lbl_date, lbl_type,
+lbl_active, lbl_offline, lbl_pending, lbl_resolved, lbl_inprogress,
+lbl_high, lbl_medium, lbl_low, lbl_critical,
+dashboard_complaints, dashboard_sensors, dashboard_riskzones,
+dashboard_resolved, dashboard_budget,
+settings_profile, settings_theme, settings_language,
+settings_save_success, settings_name, settings_email, settings_role,
+notif_title, notif_markread, notif_empty,
+empty_no_data, empty_no_complaints, empty_loading,
+pilot_label, demo_label
+
+Wrap App in LanguageProvider.
+Apply t("key") across ALL page components and sidebar.
