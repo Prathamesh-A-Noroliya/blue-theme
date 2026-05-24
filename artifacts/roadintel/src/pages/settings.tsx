@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Bell, Globe, Shield, Eye, Download, CheckCircle } from "lucide-react";
+import { Bell, Globe, Shield, Eye, Download, CheckCircle, LogOut } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 
 type Profile = { name: string; email: string; role: string };
 
@@ -31,6 +32,7 @@ function applyTheme(theme: "dark" | "light") {
 
 export default function Settings() {
   const { t, lang, setLang } = useLanguage();
+  const { user, isGuest, logout } = useAuth();
   const [profile, setProfile] = useState<Profile>(loadProfile);
   const [savedMsg, setSavedMsg] = useState(false);
   const [theme, setThemeState] = useState<"dark" | "light">(loadTheme);
@@ -154,6 +156,25 @@ export default function Settings() {
         </div>
       </div>
 
+      {/* Sign Out */}
+      <div className="p-5 rounded-2xl" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}>
+        <div className="flex items-center gap-3 mb-4">
+          <LogOut className="w-4 h-4" style={{ color: "#DC2626" }} />
+          <h3 className="font-semibold" style={{ fontFamily: "Sora, sans-serif" }}>{t("btn_signout")}</h3>
+        </div>
+        <div className="space-y-3">
+          <p className="text-sm text-muted-foreground">
+            {isGuest ? t("lbl_signed_in_as") + " " + t("lbl_guest") : t("lbl_signed_in_as") + " " + (user.email || "")}
+          </p>
+          <button
+            onClick={logout}
+            className="px-4 py-2 rounded-xl text-sm font-medium text-red-600 border border-red-600 hover:bg-red-50 transition-colors"
+          >
+            {t("btn_signout")}
+          </button>
+        </div>
+      </div>
+
       {/* Privacy */}
       <div className="p-5 rounded-2xl" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}>
         <div className="flex items-center gap-3 mb-4">
@@ -175,7 +196,7 @@ export default function Settings() {
         <div className="text-xs text-muted-foreground space-y-1">
           <div>Platform Version: RoadIntel Pilot v1.0</div>
           <div>Pune Metropolitan Zone — Maharashtra Road Safety Initiative</div>
-          <div>Built for National Hackathon 2025</div>
+          <div>Demo Data — May 2026</div>
         </div>
       </div>
     </div>

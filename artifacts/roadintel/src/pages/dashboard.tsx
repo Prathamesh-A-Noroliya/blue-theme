@@ -6,17 +6,17 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recha
 import { useLanguage } from "@/context/LanguageContext";
 import { getHealthColor, getRiskColor } from "@/lib/utils";
 
-function StatCard({ label, value, icon: Icon, color, sub }: { label: string; value: string | number; icon: React.ElementType; color: string; sub?: string }) {
+function StatCard({ label, value, icon: Icon, gradient, sub }: { label: string; value: string | number; icon: React.ElementType; gradient: string; sub?: string }) {
   return (
-    <div className="p-5 rounded-2xl" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}>
+    <div className={`p-5 rounded-2xl text-white ${gradient}`}>
       <div className="flex items-start justify-between mb-3">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `${color}18` }}>
-          <Icon className="w-5 h-5" style={{ color }} />
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/20">
+          <Icon className="w-5 h-5 text-white" />
         </div>
       </div>
       <div className="text-2xl font-bold mb-0.5" style={{ fontFamily: "Sora, sans-serif" }}>{value}</div>
       <div className="text-sm font-medium">{label}</div>
-      {sub && <div className="text-xs mt-1 text-muted-foreground">{sub}</div>}
+      {sub && <div className="text-xs mt-1 text-white/70">{sub}</div>}
     </div>
   );
 }
@@ -72,11 +72,11 @@ export default function Dashboard() {
 
       {/* Stats grid */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <StatCard label={t("dashboard_complaints")} value={stats.complaints} icon={FileText} color="#0EA5A4" sub={t("pilot_label")} />
-        <StatCard label="Active Issues" value={stats.activeIssues} icon={AlertTriangle} color="#DC2626" />
-        <StatCard label="Roads Monitored" value={stats.roadsMonitored} icon={Map} color="#16A34A" />
-        <StatCard label={t("dashboard_sensors")} value={`${stats.anomalies} today`} icon={Radio} color="#F59E0B" />
-        <StatCard label="Avg Health Score" value={`${stats.avgHealth}/100`} icon={Activity} color="#0EA5A4" />
+        <StatCard label={t("dashboard_complaints")} value={stats.complaints} icon={FileText} gradient="bg-gradient-to-br from-blue-500 to-blue-700" sub={t("pilot_label")} />
+        <StatCard label="Active Issues" value={stats.activeIssues} icon={AlertTriangle} gradient="bg-gradient-to-br from-red-500 to-rose-700" />
+        <StatCard label="Roads Monitored" value={stats.roadsMonitored} icon={Map} gradient="bg-gradient-to-br from-green-500 to-emerald-700" />
+        <StatCard label={t("dashboard_sensors")} value={`${stats.anomalies} today`} icon={Radio} gradient="bg-gradient-to-br from-indigo-500 to-indigo-700" />
+        <StatCard label="Avg Health Score" value={`${stats.avgHealth}/100`} icon={Activity} gradient="bg-gradient-to-br from-purple-500 to-purple-700" />
       </div>
 
       {/* Monthly complaints chart */}

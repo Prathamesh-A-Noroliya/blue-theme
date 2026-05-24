@@ -1,16 +1,17 @@
-import { Switch, Route, Router as WouterRouter } from "wouter";
+import { useEffect } from "react";
+import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { ThemeProvider } from "@/components/theme-provider";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
 import NotFound from "@/pages/not-found";
 
 import RootLayout from "@/components/layout/root-layout";
 import AppLayout from "@/components/layout/app-layout";
 
 import Landing from "@/pages/landing";
-import Login from "@/pages/login";
+import LoginPage from "@/pages/LoginPage";
 import Register from "@/pages/register";
 import Dashboard from "@/pages/dashboard";
 import Complaints from "@/pages/complaints";
@@ -29,30 +30,50 @@ import Subscribe from "@/pages/subscribe";
 
 const queryClient = new QueryClient();
 
-function AppRoute({ path, children }: { path: string; children: React.ReactNode }) {
-  return <Route path={path}><AppLayout>{children}</AppLayout></Route>;
+function RedirectTo({ path }: { path: string }) {
+  const [, setLocation] = useLocation();
+  useEffect(() => { setLocation(path); }, [path, setLocation]);
+  return null;
+}
+
+function ProtectedAppRoute({ path, children }: { path: string; children: React.ReactNode }) {
+  const { isLoggedIn } = useAuth();
+  return (
+    <Route path={path}>
+      {isLoggedIn ? <AppLayout>{children}</AppLayout> : <RedirectTo path="/login" />}
+    </Route>
+  );
+}
+
+function PublicRoute({ path, children }: { path: string; children: React.ReactNode }) {
+  const { isLoggedIn } = useAuth();
+  return (
+    <Route path={path}>
+      {isLoggedIn ? <RedirectTo path="/dashboard" /> : children}
+    </Route>
+  );
 }
 
 function Router() {
   return (
     <Switch>
-      <Route path="/"><RootLayout><Landing /></RootLayout></Route>
-      <Route path="/login"><RootLayout><Login /></RootLayout></Route>
-      <Route path="/register"><RootLayout><Register /></RootLayout></Route>
-      <AppRoute path="/dashboard"><Dashboard /></AppRoute>
-      <AppRoute path="/complaints"><Complaints /></AppRoute>
-      <AppRoute path="/scan"><Scan /></AppRoute>
-      <AppRoute path="/roads"><Roads /></AppRoute>
-      <AppRoute path="/roads/:id"><RoadDetail /></AppRoute>
-      <AppRoute path="/risk-map"><RiskMap /></AppRoute>
-      <AppRoute path="/spending"><Spending /></AppRoute>
-      <AppRoute path="/sensors"><Sensors /></AppRoute>
-      <AppRoute path="/contractors"><Contractors /></AppRoute>
-      <AppRoute path="/analytics"><Analytics /></AppRoute>
-      <AppRoute path="/settings"><Settings /></AppRoute>
-      <AppRoute path="/sos"><SOS /></AppRoute>
-      <AppRoute path="/assistant"><Assistant /></AppRoute>
-      <AppRoute path="/subscribe"><Subscribe /></AppRoute>
+      <PublicRoute path="/"><RootLayout><Landing /></RootLayout></PublicRoute>
+      <PublicRoute path="/login"><RootLayout><LoginPage /></RootLayout></PublicRoute>
+      <PublicRoute path="/register"><RootLayout><Register /></RootLayout></PublicRoute>
+      <ProtectedAppRoute path="/dashboard"><Dashboard /></ProtectedAppRoute>
+      <ProtectedAppRoute path="/complaints"><Complaints /></ProtectedAppRoute>
+      <ProtectedAppRoute path="/scan"><Scan /></ProtectedAppRoute>
+      <ProtectedAppRoute path="/roads"><Roads /></ProtectedAppRoute>
+      <ProtectedAppRoute path="/roads/:id"><RoadDetail /></ProtectedAppRoute>
+      <ProtectedAppRoute path="/risk-map"><RiskMap /></ProtectedAppRoute>
+      <ProtectedAppRoute path="/spending"><Spending /></ProtectedAppRoute>
+      <ProtectedAppRoute path="/sensors"><Sensors /></ProtectedAppRoute>
+      <ProtectedAppRoute path="/contractors"><Contractors /></ProtectedAppRoute>
+      <ProtectedAppRoute path="/analytics"><Analytics /></ProtectedAppRoute>
+      <ProtectedAppRoute path="/settings"><Settings /></ProtectedAppRoute>
+      <ProtectedAppRoute path="/sos"><SOS /></ProtectedAppRoute>
+      <ProtectedAppRoute path="/assistant"><Assistant /></ProtectedAppRoute>
+      <ProtectedAppRoute path="/subscribe"><Subscribe /></ProtectedAppRoute>
       <Route component={NotFound} />
     </Switch>
   );
@@ -60,8 +81,8 @@ function Router() {
 
 function App() {
   return (
-    <LanguageProvider>
-      <ThemeProvider defaultTheme="dark" storageKey="roadintel-theme">
+    <AuthProvider>
+      <LanguageProvider>
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>
             <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
@@ -70,8 +91,8 @@ function App() {
             <Toaster />
           </TooltipProvider>
         </QueryClientProvider>
-      </ThemeProvider>
-    </LanguageProvider>
+      </LanguageProvider>
+    </AuthProvider>
   );
 }
 

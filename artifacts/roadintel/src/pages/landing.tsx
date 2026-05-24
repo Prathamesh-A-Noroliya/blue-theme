@@ -222,7 +222,7 @@ export default function Landing() {
           <span className="font-bold text-white" style={{ fontFamily: "Sora, sans-serif" }}>RoadIntel</span>
         </div>
         <p className="text-sm" style={{ color: "rgba(255,255,255,0.3)" }}>
-          AI-Powered Road Intelligence Platform — Built for Hackathon Demo 2025
+          AI-Powered Road Intelligence Platform — Pune Pilot Phase | May 2026
         </p>
       </footer>
     </div>

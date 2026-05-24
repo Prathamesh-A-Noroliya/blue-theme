@@ -3,9 +3,10 @@ import { Link, useLocation } from "wouter";
 import {
   LayoutDashboard, FileText, Scan, Map, TrendingDown, Wallet,
   Radio, Users, BarChart3, Settings, Bell, Menu, X, ChevronRight,
-  Shield, Activity, Siren, Bot, CreditCard, Globe
+  Shield, Activity, Siren, Bot, CreditCard, Globe, LogOut
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 import { ChatbotPanel } from "@/components/chatbot-panel";
 
 const navItems = [
@@ -39,6 +40,8 @@ const NOTIFICATIONS = [
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { t, lang } = useLanguage();
+  const { user, isGuest, logout } = useAuth();
+  const [, setLocation] = useLocation();
   const [location] = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
@@ -69,19 +72,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <div className="flex h-screen bg-background overflow-hidden">
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 flex flex-col transition-transform duration-300 lg:relative lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
-        style={{ background: "hsl(var(--sidebar))", borderRight: "1px solid hsl(var(--sidebar-border))" }}
+        className={`fixed inset-y-0 left-0 z-50 w-64 flex flex-col transition-transform duration-300 lg:relative lg:translate-x-0 bg-gradient-to-b from-blue-900 via-blue-800 to-indigo-900 text-white ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         {/* Logo */}
-        <div className="flex items-center gap-3 px-5 py-5 border-b" style={{ borderColor: "hsl(var(--sidebar-border))" }}>
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "hsl(var(--sidebar-primary))" }}>
-            <Shield className="w-4 h-4" style={{ color: "hsl(var(--sidebar-primary-foreground))" }} />
+        <div className="flex items-center gap-3 px-5 py-5 border-b border-white/10">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-teal-400">
+            <Shield className="w-4 h-4 text-white" />
           </div>
           <div>
-            <div className="font-bold text-sm" style={{ fontFamily: "Sora, sans-serif", color: "hsl(var(--sidebar-foreground))" }}>RoadIntel</div>
-            <div className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>{t("pilot_version")}</div>
+            <div className="font-bold text-white text-sm" style={{ fontFamily: "Sora, sans-serif" }}>RoadIntel</div>
+            <div className="text-xs text-blue-300">{t("pilot_version")}</div>
           </div>
-          <button className="ml-auto lg:hidden" onClick={() => setSidebarOpen(false)} style={{ color: "hsl(var(--sidebar-foreground))" }}>
+          <button className="ml-auto lg:hidden text-white/80 hover:text-white" onClick={() => setSidebarOpen(false)}>
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -90,7 +92,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
           {["main", "intel", "emergency", "account"].map(gkey => (
             <div key={gkey}>
-              <div className="px-2 py-1 text-xs font-semibold uppercase tracking-widest" style={{ color: "hsl(var(--muted-foreground))" }}>
+              <div className="px-2 py-1 text-xs font-semibold uppercase tracking-widest text-white/50">
                 {groupLabels[gkey]}
               </div>
               <div className="space-y-0.5 mt-1">
@@ -100,12 +102,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   return (
                     <Link key={href} href={href}>
                       <div
-                        className="sidebar-item"
-                        style={active ? {
-                          background: "hsl(var(--sidebar-primary) / 0.15)",
-                          color: "hsl(var(--sidebar-primary))",
-                          borderLeft: "3px solid hsl(var(--sidebar-primary))",
-                        } : {}}
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-colors text-sm ${active ? "bg-white/20 text-white" : "text-white/70 hover:bg-white/10 hover:text-white"}`}
                         onClick={() => setSidebarOpen(false)}
                       >
                         <Icon className="w-4 h-4 shrink-0" style={key === "nav_sos" ? { color: active ? undefined : "#E53935" } : {}} />
@@ -125,8 +122,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </nav>
 
         {/* Language quick picker */}
-        <div className="px-4 py-2 border-t" style={{ borderColor: "hsl(var(--sidebar-border))" }}>
-          <div className="flex items-center gap-2 text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>
+        <div className="px-4 py-2 border-t border-white/10">
+          <div className="flex items-center gap-2 text-xs text-white/50">
             <Globe className="w-3 h-3" />
             <span>{lang.toUpperCase()}</span>
             <Link href="/settings"><span className="ml-auto underline cursor-pointer hover:opacity-70">{t("btn_view")}</span></Link>
@@ -134,12 +131,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Bottom info */}
-        <div className="px-4 py-3 border-t space-y-1" style={{ borderColor: "hsl(var(--sidebar-border))" }}>
-          <div className="flex items-center gap-2 text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>
-            <Activity className="w-3 h-3" style={{ color: "#16A34A" }} />
+        <div className="px-4 py-3 border-t border-white/10 space-y-1">
+          <div className="flex items-center gap-2 text-xs text-white/50">
+            <Activity className="w-3 h-3 text-green-400" />
             <span>{t("all_systems")}</span>
           </div>
-          <div className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>{t("demo_label")}</div>
+          <div className="text-xs text-blue-300">{t("pilot_version")}</div>
         </div>
       </aside>
 
@@ -149,24 +146,23 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top bar */}
-        <header className="flex items-center gap-4 px-4 py-3 border-b shrink-0" style={{ borderColor: "hsl(var(--border))", background: "hsl(var(--card))" }}>
-          <button className="lg:hidden p-2 rounded-lg hover:bg-muted" onClick={() => setSidebarOpen(true)}>
+        <header className="flex items-center gap-4 px-4 py-3 border-b border-white/10 shrink-0 bg-gradient-to-r from-blue-800 to-indigo-700 text-white">
+          <button className="lg:hidden p-2 rounded-lg hover:bg-white/10 text-white" onClick={() => setSidebarOpen(true)}>
             <Menu className="w-5 h-5" />
           </button>
           <div className="flex-1">
-            <div className="text-xs text-muted-foreground">{t("welcome_back")}, {(() => { try { return JSON.parse(localStorage.getItem("roadintel_profile") || "{}").name || "Demo User"; } catch { return "Demo User"; } })()}</div>
+            <div className="text-xs text-white/70">{t("welcome_back")}, {user.name || "Demo User"}</div>
           </div>
           <div className="flex items-center gap-2">
             {/* SOS quick button */}
             <Link href="/sos">
-              <button className="px-3 py-1.5 rounded-xl text-xs font-bold text-white flex items-center gap-1.5 hover:opacity-90 transition-opacity"
-                style={{ background: "linear-gradient(90deg, #E53935, #B71C1C)" }}>
+              <button className="px-3 py-1.5 rounded-xl text-xs font-bold text-white flex items-center gap-1.5 hover:opacity-90 transition-opacity bg-gradient-to-r from-red-500 to-red-700">
                 <Siren className="w-3.5 h-3.5" /> SOS
               </button>
             </Link>
             {/* Notification bell */}
             <div className="relative" ref={notifRef}>
-              <button onClick={() => setNotifOpen(!notifOpen)} className="relative p-2 rounded-lg hover:bg-muted">
+              <button onClick={() => setNotifOpen(!notifOpen)} className="relative p-2 rounded-lg hover:bg-white/10 text-white">
                 <Bell className="w-5 h-5" />
                 {unreadCount > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full text-xs flex items-center justify-center text-white font-bold" style={{ background: "#DC2626" }}>
@@ -203,9 +199,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 </div>
               )}
             </div>
-            <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white" style={{ background: "hsl(var(--sidebar-primary))" }}>
-              {(() => { try { return (JSON.parse(localStorage.getItem("roadintel_profile") || "{}").name || "D").charAt(0).toUpperCase(); } catch { return "D"; } })()}
+            {/* User avatar */}
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white bg-teal-400">
+              {(user.name || "D").charAt(0).toUpperCase()}
             </div>
+            {/* Sign Out */}
+            <button
+              onClick={() => { logout(); setLocation("/login"); }}
+              className="p-2 rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+              title="Sign Out"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </header>
 
@@ -215,7 +220,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </main>
 
         {/* Footer note */}
-        <footer className="px-4 py-2 text-center text-[10px] text-muted-foreground border-t" style={{ borderColor: "hsl(var(--border))" }}>
+        <footer className="px-4 py-2 text-center text-[10px] text-white/40 border-t border-white/10 bg-gradient-to-r from-blue-800 to-indigo-700">
           {t("footer_note")}
         </footer>
       </div>
