@@ -24,7 +24,7 @@ export function ChatbotPanel({ onClose }: { onClose: () => void }) {
     setMessages((m) => [...m, { role: "user", text }]);
     setInput("");
     try {
-      const res = await chat.mutateAsync({ message: text });
+      const res = await chat.mutateAsync({ data: { message: text } });
       setMessages((m) => [...m, { role: "assistant", text: res.response }]);
     } catch {
       setMessages((m) => [...m, { role: "assistant", text: "I encountered an error. Please try again." }]);

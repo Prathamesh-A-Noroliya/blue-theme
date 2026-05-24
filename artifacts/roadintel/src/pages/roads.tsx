@@ -103,12 +103,10 @@ export default function Roads() {
 }
 
 const MOCK_ROADS = [
-  { id: 1, name: "MG Road", roadType: "National Highway", location: "Bangalore, KA", healthScore: 78, riskLevel: "medium", status: "active", contractorName: "BuildRight Infrastructure", totalComplaints: 12 },
-  { id: 2, name: "NH-48 Stretch", roadType: "National Highway", location: "Delhi-Gurugram", healthScore: 34, riskLevel: "critical", status: "deteriorating", contractorName: "RoadCraft Solutions", totalComplaints: 47 },
-  { id: 3, name: "Outer Ring Road South", roadType: "State Highway", location: "Bangalore, KA", healthScore: 85, riskLevel: "low", status: "good", contractorName: "National Road Works", totalComplaints: 5 },
-  { id: 4, name: "Andheri-Kurla Road", roadType: "Municipal Road", location: "Mumbai, MH", healthScore: 28, riskLevel: "critical", status: "deteriorating", contractorName: "RoadCraft Solutions", totalComplaints: 63 },
-  { id: 5, name: "Electronic City Flyover", roadType: "Elevated Highway", location: "Bangalore, KA", healthScore: 91, riskLevel: "low", status: "excellent", contractorName: "Infra Prime Builders", totalComplaints: 2 },
-  { id: 6, name: "GST Road", roadType: "National Highway", location: "Chennai, TN", healthScore: 62, riskLevel: "medium", status: "active", contractorName: "National Road Works", totalComplaints: 18 },
-  { id: 7, name: "AIIMS Delhi Stretch", roadType: "State Highway", location: "Delhi", healthScore: 22, riskLevel: "critical", status: "deteriorating", contractorName: "QuickFix Road Services", totalComplaints: 89 },
-  { id: 8, name: "Mumbai-Pune Expressway Sec-3", roadType: "Expressway", location: "Pune, MH", healthScore: 88, riskLevel: "low", status: "excellent", contractorName: "BuildRight Infrastructure", totalComplaints: 3 },
+  { id: 1, name: "Katraj Ghat, Pune", roadType: "State Highway", location: "Pune, MH", healthScore: 38, riskLevel: "critical", status: "deteriorating", contractorName: "PWD Maharashtra Pune Division", totalComplaints: 12 },
+  { id: 2, name: "Hadapsar Junction, Pune", roadType: "Urban Road", location: "Pune, MH", healthScore: 58, riskLevel: "medium", status: "active", contractorName: "PMC Road Dept", totalComplaints: 8 },
+  { id: 3, name: "NH-48 near Khopoli", roadType: "National Highway", location: "Khopoli, Raigad", healthScore: 32, riskLevel: "critical", status: "deteriorating", contractorName: "NHAI Pune Zone", totalComplaints: 15 },
+  { id: 4, name: "Swargate Circle, Pune", roadType: "Urban Road", location: "Pune, MH", healthScore: 65, riskLevel: "medium", status: "active", contractorName: "PMC Central Zone", totalComplaints: 5 },
+  { id: 5, name: "Nashik Phata, Pimpri", roadType: "State Highway", location: "Pimpri-Chinchwad, MH", healthScore: 48, riskLevel: "high", status: "active", contractorName: "MSRDC Pune", totalComplaints: 9 },
+  { id: 6, name: "Mumbai-Pune Expressway KM 42", roadType: "Expressway", location: "Pune District, MH", healthScore: 72, riskLevel: "high", status: "active", contractorName: "MSRDC Pune", totalComplaints: 11 },
 ];

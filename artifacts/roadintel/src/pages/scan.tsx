@@ -21,7 +21,7 @@ export default function ScanPage() {
     setResult(null);
     await new Promise(r => setTimeout(r, 2500));
     try {
-      const res = await analyze.mutateAsync({ imageUrl: url });
+      const res = await analyze.mutateAsync({ data: { imageUrl: url } });
       setResult(res);
     } catch {
       setResult(MOCK_RESULT);

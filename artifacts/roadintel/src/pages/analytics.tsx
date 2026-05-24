@@ -14,18 +14,17 @@ const MOCK_ANALYTICS = {
     critical: Math.floor(1 + i * 0.3),
   })),
   repairEfficiency: [
-    { contractor: "Infra Prime", onTime: 98, budget: 97, quality: 91 },
-    { contractor: "BuildRight", onTime: 88, budget: 84, quality: 82 },
-    { contractor: "National Roads", onTime: 76, budget: 72, quality: 68 },
-    { contractor: "RoadCraft", onTime: 42, budget: 31, quality: 38 },
-    { contractor: "QuickFix", onTime: 18, budget: 14, quality: 22 },
+    { contractor: "NHAI Pune Zone", onTime: 85, budget: 82, quality: 71 },
+    { contractor: "PMC Road Dept", onTime: 74, budget: 70, quality: 62 },
+    { contractor: "MSRDC Pune", onTime: 68, budget: 65, quality: 58 },
+    { contractor: "PWD Pune Division", onTime: 55, budget: 48, quality: 60 },
   ],
   issuesByCity: [
-    { city: "Mumbai", critical: 28, high: 45, medium: 62, low: 30 },
-    { city: "Delhi", critical: 19, high: 38, medium: 51, low: 25 },
-    { city: "Bangalore", critical: 12, high: 28, medium: 42, low: 38 },
-    { city: "Chennai", critical: 8, high: 22, medium: 35, low: 45 },
     { city: "Pune", critical: 5, high: 15, medium: 25, low: 52 },
+    { city: "Pimpri-Chinchwad", critical: 2, high: 8, medium: 12, low: 35 },
+    { city: "Khopoli", critical: 4, high: 6, medium: 4, low: 8 },
+    { city: "Satara", critical: 1, high: 3, medium: 6, low: 18 },
+    { city: "Nashik", critical: 1, high: 4, medium: 9, low: 22 },
   ],
 };
 

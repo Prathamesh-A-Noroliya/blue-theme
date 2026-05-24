@@ -4,30 +4,28 @@ import { Wallet, AlertTriangle, TrendingDown, CheckCircle } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 
 const MOCK_OVERVIEW = {
-  totalBudget: 241800000, totalSpent: 253100000,
-  wastedOnRepeatRepairs: 28500000, suspiciousTransactions: 12,
-  avgCostPerKm: 8200000, roadsUnderBudget: 4, roadsOverBudget: 3,
+  totalBudget: 50000000, totalSpent: 23000000,
+  wastedOnRepeatRepairs: 4200000, suspiciousTransactions: 2,
+  avgCostPerKm: 5200000, roadsUnderBudget: 3, roadsOverBudget: 2,
   yearlyTrend: [
-    { year: "2021", budget: 180000000, spent: 172000000, quality: 74 },
-    { year: "2022", budget: 195000000, spent: 198000000, quality: 68 },
-    { year: "2023", budget: 210000000, spent: 227000000, quality: 58 },
-    { year: "2024", budget: 241800000, spent: 253100000, quality: 52 },
+    { year: "2021", budget: 35000000, spent: 32000000, quality: 68 },
+    { year: "2022", budget: 42000000, spent: 38000000, quality: 62 },
+    { year: "2023", budget: 48000000, spent: 45000000, quality: 58 },
+    { year: "2024", budget: 50000000, spent: 23000000, quality: 55 },
   ],
 };
 
 const MOCK_CONTRACTOR_SPENDING = [
-  { contractorId: 1, contractorName: "BuildRight Infrastructure", totalSpent: 48400000, qualityScore: 82, efficiency: 94, flagged: false },
-  { contractorId: 2, contractorName: "RoadCraft Solutions", totalSpent: 38200000, qualityScore: 38, efficiency: 31, flagged: true },
-  { contractorId: 3, contractorName: "National Road Works", totalSpent: 108000000, qualityScore: 68, efficiency: 72, flagged: false },
-  { contractorId: 4, contractorName: "Infra Prime Builders", totalSpent: 51500000, qualityScore: 91, efficiency: 98, flagged: false },
-  { contractorId: 5, contractorName: "QuickFix Road Services", totalSpent: 8900000, qualityScore: 22, efficiency: 18, flagged: true },
+  { contractorId: 1, contractorName: "PMC Road Dept", totalSpent: 8500000, qualityScore: 72, efficiency: 78, flagged: false },
+  { contractorId: 2, contractorName: "MSRDC Pune", totalSpent: 14200000, qualityScore: 58, efficiency: 65, flagged: false },
+  { contractorId: 3, contractorName: "NHAI Pune Zone", totalSpent: 21000000, qualityScore: 71, efficiency: 82, flagged: false },
+  { contractorId: 4, contractorName: "PWD Pune Division", totalSpent: 6800000, qualityScore: 60, efficiency: 58, flagged: true },
 ];
 
 const MOCK_FLAGS = [
-  { id: 1, type: "Repeated Repair", description: "Road repaired 5 times in 3 years — abnormal frequency", roadName: "NH-48 Stretch", contractorName: "RoadCraft Solutions", severity: "critical", evidence: "5 repair cycles in 36 months, each averaging 8 months lifespan vs 24-month minimum standard", detectedAt: "2024-04-10", status: "open" },
-  { id: 2, type: "Budget Overrun", description: "Repair cost unusually high for short lifespan", roadName: "Andheri-Kurla Road", contractorName: "RoadCraft Solutions", severity: "critical", evidence: "₹68L spent vs ₹45L allocated. Quality score 28/100. Cost efficiency: 31%", detectedAt: "2024-04-12", status: "open" },
-  { id: 3, type: "Low Quality Score", description: "Contractor with multiple failed roads", roadName: "AIIMS Delhi Stretch", contractorName: "QuickFix Road Services", severity: "high", evidence: "3 of 5 roads managed show critical failure. Trust score 22/100.", detectedAt: "2024-04-08", status: "under review" },
-  { id: 4, type: "Suspicious Pattern", description: "Rapid re-failure after repair completion", roadName: "Andheri-Kurla Road", contractorName: "RoadCraft Solutions", severity: "high", evidence: "Each repair fails within 8-12 months. AI pattern: materials likely substandard.", detectedAt: "2024-04-15", status: "open" },
+  { id: 1, type: "Budget Overrun", description: "Swargate flyover repair cost 23% above allocated budget", roadName: "Swargate Circle, Pune", contractorName: "PWD Pune Division", severity: "high", evidence: "₹5.5 Cr spent vs ₹4.5 Cr allocated. Quality audit flagged 12 material deviations.", detectedAt: "2024-04-10", status: "open" },
+  { id: 2, type: "Repeated Repair", description: "Katraj Ghat repaired 4 times in 2 years — abnormal frequency", roadName: "Katraj Ghat, Pune", contractorName: "PWD Pune Division", severity: "critical", evidence: "4 repair cycles in 24 months, each averaging 6 months lifespan vs 18-month minimum standard", detectedAt: "2024-04-12", status: "open" },
+  { id: 3, type: "Low Quality Score", description: "Sensor data shows substandard surface on Baner Road stretch", roadName: "Baner Road, Pune", contractorName: "MSRDC Pune", severity: "medium", evidence: "Vibration anomaly 6.2/10. Roughness index exceeds threshold by 18%.", detectedAt: "2024-04-08", status: "under review" },
 ];
 
 export default function Spending() {

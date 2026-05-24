@@ -11,16 +11,17 @@ const HEALTH_TREND = [
 ];
 
 const MOCK_ROAD = {
-  id: 1, name: "MG Road", roadType: "National Highway", location: "Bangalore, Karnataka",
-  constructionDate: "2018-03-15", contractorName: "BuildRight Infrastructure Ltd",
-  allocatedBudget: 12500000, spentBudget: 13200000,
-  healthScore: 78, riskLevel: "medium", status: "active",
-  totalComplaints: 12, lastRepairDate: "2024-08-10", repeatFailures: 2,
-  aiSummary: "MG Road shows moderate wear with isolated pothole clusters near Residency Road junction. Sensor data indicates rising vibration indices over the past 3 months. Two repair cycles completed under the same contractor. Third failure risk elevated. Budget utilization exceeded by 5.6%. AI recommends independent quality audit before next repair cycle.",
+  id: 1, name: "Katraj Ghat, Pune", roadType: "State Highway", location: "Pune, Maharashtra",
+  constructionDate: "2018-03-15", contractorName: "PWD Maharashtra Pune Division",
+  allocatedBudget: 2100000, spentBudget: 2800000,
+  healthScore: 38, riskLevel: "critical", status: "deteriorating",
+  totalComplaints: 12, lastRepairDate: "2024-01-15", repeatFailures: 4,
+  aiSummary: "Katraj Ghat shows severe wear with 12 incidents recorded Jan–Mar 2024. Sensor data indicates extreme vibration indices (7.2/10). Four repair cycles completed in 24 months under PWD Pune Division, each averaging only 6 months lifespan vs 18-month minimum standard. Budget overrun 33%. AI recommends independent quality audit and material testing before next repair cycle.",
   healthTrend: HEALTH_TREND,
   repairHistory: [
-    { id: 1, description: "Pothole patching - Phase 1", cost: 850000, contractorName: "BuildRight", startDate: "2024-05-01", endDate: "2024-05-15", status: "completed", citizenVerified: true, aiValidated: true },
-    { id: 2, description: "Pothole patching - Phase 2", cost: 920000, contractorName: "BuildRight", startDate: "2024-08-01", endDate: "2024-08-10", status: "completed", citizenVerified: true, aiValidated: true },
+    { id: 1, description: "Surface relaying - Phase 1", cost: 520000, contractorName: "PWD Pune Division", startDate: "2023-01-10", endDate: "2023-02-05", status: "completed", citizenVerified: true, aiValidated: true },
+    { id: 2, description: "Pothole patching - Phase 2", cost: 340000, contractorName: "PWD Pune Division", startDate: "2023-07-01", endDate: "2023-07-20", status: "completed", citizenVerified: false, aiValidated: true },
+    { id: 3, description: "Edge repair - Phase 3", cost: 480000, contractorName: "PWD Pune Division", startDate: "2024-01-01", endDate: "2024-01-15", status: "completed", citizenVerified: true, aiValidated: false },
   ],
 };
 
@@ -46,7 +47,7 @@ function ScoreGauge({ score, size = 80 }: { score: number; size?: number }) {
 export default function RoadDetail() {
   const [, params] = useRoute("/roads/:id");
   const id = Number(params?.id);
-  const { data: road, isLoading } = useGetRoad(id, { query: { enabled: !!id } });
+  const { data: road, isLoading } = useGetRoad(id, { query: { queryKey: ["road", id], enabled: !!id } as any });
   const r: any = road ?? MOCK_ROAD;
 
   if (isLoading) return <div className="p-6 text-muted-foreground">Loading Road DNA...</div>;

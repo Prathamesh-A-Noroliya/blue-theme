@@ -16,10 +16,10 @@ router.get("/roads", async (req, res) => {
     .leftJoin(contractors, eq(roads.contractorId, contractors.id))
     .leftJoin(complaints, eq(complaints.roadId, roads.id))
     .groupBy(roads.id, contractors.name);
-    res.json(result);
+    return res.json(result);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to fetch roads" });
+    return res.status(500).json({ error: "Failed to fetch roads" });
   }
 });
 
@@ -40,14 +40,14 @@ router.get("/roads/:id", async (req, res) => {
       { month: "Mar", score: (road.healthScore ?? 0) },
       { month: "Apr", score: road.healthScore ?? 0 },
     ];
-    res.json({
+    return res.json({
       ...road, contractorName: contractor?.name,
       aiSummary: `AI analysis for ${road.name}: Health score ${road.healthScore}/100. Risk level: ${road.riskLevel}. Monitoring closely with sensor data.`,
       healthTrend, repairHistory: repairs,
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to fetch road" });
+    return res.status(500).json({ error: "Failed to fetch road" });
   }
 });
 

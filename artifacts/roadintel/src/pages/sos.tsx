@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { AlertTriangle, MapPin, Phone, Heart, Navigation, Clock, CheckCircle, Loader2, X, Siren } from "lucide-react";
 
 const HOSPITALS = [
-  { id: 1, name: "AIIMS Trauma Centre", distance: "0.8 km", phone: "011-26588500", address: "Ansari Nagar, New Delhi", type: "Government", beds: 42, lat: 28.5672, lng: 77.21 },
-  { id: 2, name: "Safdarjung Hospital", distance: "2.1 km", phone: "011-26730430", address: "Safdarjung Enclave, Delhi", type: "Government", beds: 15, lat: 28.5684, lng: 77.2066 },
-  { id: 3, name: "Apollo Hospital", distance: "3.4 km", phone: "011-71791090", address: "Sarita Vihar, Delhi", type: "Private", beds: 28, lat: 28.533, lng: 77.296 },
-  { id: 4, name: "Max Super Speciality", distance: "4.2 km", phone: "011-26515050", address: "Saket, New Delhi", type: "Private", beds: 8, lat: 28.5245, lng: 77.2066 },
-  { id: 5, name: "RML Hospital", distance: "5.1 km", phone: "011-23365525", address: "Connaught Place, Delhi", type: "Government", beds: 62, lat: 28.6347, lng: 77.2219 },
+  { id: 1, name: "Sassoon General Hospital", distance: "0.9 km", phone: "020-26128000", address: "Sassoon Road, Pune", type: "Government", beds: 38, lat: 18.531, lng: 73.868 },
+  { id: 2, name: "Ruby Hall Clinic", distance: "1.8 km", phone: "020-26166941", address: "40 Sassoon Road, Pune", type: "Private", beds: 22, lat: 18.528, lng: 73.87 },
+  { id: 3, name: "Jehangir Hospital", distance: "2.4 km", phone: "020-26059600", address: "32 Sasoon Road, Pune", type: "Private", beds: 18, lat: 18.525, lng: 73.875 },
+  { id: 4, name: "Deenanath Mangeshkar Hospital", distance: "3.1 km", phone: "020-40151000", address: "Erandwane, Pune", type: "Private", beds: 12, lat: 18.51, lng: 73.835 },
+  { id: 5, name: "Bharati Hospital", distance: "4.5 km", phone: "020-24303000", address: "Katraj-Dhankawadi, Pune", type: "Government", beds: 45, lat: 18.457, lng: 73.862 },
 ];
 
 type SOSStatus = "idle" | "locating" | "dispatching" | "dispatched";
@@ -29,13 +29,13 @@ export default function SOSPage() {
           dispatch();
         },
         () => {
-          setLocation({ lat: 28.5672, lng: 77.21, address: "New Delhi (Approximate Location)" });
+          setLocation({ lat: 18.531, lng: 73.868, address: "Pune (Approximate Location)" });
           dispatch();
         },
         { timeout: 5000 }
       );
     } else {
-      setLocation({ lat: 28.5672, lng: 77.21, address: "New Delhi (Demo Location)" });
+      setLocation({ lat: 18.531, lng: 73.868, address: "Pune (Demo Location)" });
       dispatch();
     }
   };

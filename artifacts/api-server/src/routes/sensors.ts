@@ -13,7 +13,7 @@ router.get("/sensors/overview", async (req, res) => {
       activeSensors: 847,
       roadsMonitored: await db.select().from(roads).then(r => r.length),
       liveAnomalyCount: anomalies.length,
-      avgVibrationScore: streams.reduce((a, s) => a + (s.vibrationIntensity ?? 0), 0) / (streams.length || 1),
+      avgVibrationScore: Number((streams.reduce((a, s) => a + (s.vibrationIntensity ?? 0), 0) / (streams.length || 1)).toFixed(1)),
       currentStressLevel: anomalies.length > 3 ? "high" : "medium",
       criticalZones: anomalies.filter(s => (s.vibrationIntensity ?? 0) > 8).length,
       dataPointsToday: 12847,
@@ -47,17 +47,17 @@ router.get("/sensors/analytics", async (req, res) => {
   res.json({
     vibrationTrend: Array.from({ length: 24 }, (_, i) => ({
       time: `${String(i).padStart(2, "0")}:00`,
-      "NH-48": 7 + Math.random() * 3,
-      "Andheri-Kurla": 8 + Math.random() * 2,
-      "MG Road": 3 + Math.random() * 2,
-      "Outer Ring": 1.5 + Math.random(),
+      "NH-48 Khopoli": 7 + Math.random() * 3,
+      "Katraj Tunnel": 7 + Math.random() * 2,
+      "Baner Road": 3 + Math.random() * 2,
+      "Nashik Phata": 1.5 + Math.random(),
     })),
     anomalyByRoad: [
-      { road: "AIIMS Delhi", count: 18, severity: "critical" },
-      { road: "Andheri-Kurla", count: 15, severity: "critical" },
-      { road: "NH-48", count: 12, severity: "high" },
-      { road: "MG Road", count: 6, severity: "medium" },
-      { road: "GST Road", count: 4, severity: "medium" },
+      { road: "NH-48 near Khopoli", count: 14, severity: "critical" },
+      { road: "Katraj Ghat, Pune", count: 9, severity: "critical" },
+      { road: "Nashik Phata, Pimpri", count: 7, severity: "high" },
+      { road: "Baner Road", count: 3, severity: "medium" },
+      { road: "Hadapsar Junction", count: 0, severity: "low" },
     ],
     conditionDistribution: [
       { condition: "Smooth", percentage: 25, count: 2 },
@@ -67,16 +67,16 @@ router.get("/sensors/analytics", async (req, res) => {
     ],
     stressTrend: Array.from({ length: 30 }, (_, i) => ({ date: `Apr ${i + 1}`, stress: 3.5 + Math.sin(i * 0.3) * 1.5 })),
     predictedFailures7Days: 2,
-    predictedFailures30Days: 5,
+    predictedFailures30Days: 3,
   });
 });
 
 router.get("/sensors/alerts", async (req, res) => {
   res.json([
-    { id: 1, roadName: "AIIMS Delhi Stretch", alertType: "Critical Anomaly", message: "Likely failure imminent.", severity: "critical", timestamp: "08:03:44", resolved: false },
-    { id: 2, roadName: "Andheri-Kurla Road", alertType: "Pothole Cluster", message: "Road stress rising.", severity: "critical", timestamp: "08:02:15", resolved: false },
-    { id: 3, roadName: "NH-48 Stretch", alertType: "Sensor Alert", message: "Abnormal shock after repair.", severity: "high", timestamp: "08:01:23", resolved: false },
-    { id: 4, roadName: "MG Road", alertType: "Vibration Warning", message: "Rising vibration over 7 days.", severity: "medium", timestamp: "07:45:00", resolved: false },
+    { id: 1, roadName: "NH-48 near Khopoli", alertType: "Critical Anomaly", message: "Repeated high vibration detected. Likely crack formation imminent.", severity: "critical", timestamp: "08:03:44", resolved: false },
+    { id: 2, roadName: "Katraj Ghat, Pune", alertType: "Stress Warning", message: "Vibration trend rising for 5 days. Monitor closely.", severity: "critical", timestamp: "08:01:23", resolved: false },
+    { id: 3, roadName: "Hadapsar Junction", alertType: "Sensor Offline", message: "Sensor S-02 has been offline for 2 hours. Maintenance dispatch required.", severity: "high", timestamp: "06:30:00", resolved: false },
+    { id: 4, roadName: "Nashik Phata, Pimpri", alertType: "Vibration Warning", message: "Rising vibration over 3 days. Maintenance scheduled.", severity: "medium", timestamp: "07:45:00", resolved: false },
   ]);
 });
 

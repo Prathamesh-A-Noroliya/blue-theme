@@ -9,17 +9,16 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 const MOCK_COMPLAINTS = [
-  { id: 1, complaintId: "CMP-2024-001", title: "Large pothole causing vehicle damage", location: "MG Road, Bangalore", status: "in_progress", severity: "high", issueType: "Pothole", createdAt: "2024-04-10", assignedDepartment: "BBMP Roads Division" },
-  { id: 2, complaintId: "CMP-2024-002", title: "Road collapse near metro station", location: "Andheri-Kurla Road, Mumbai", status: "pending", severity: "critical", issueType: "Road Collapse", createdAt: "2024-04-12", assignedDepartment: "MCGM Roads Department" },
-  { id: 3, complaintId: "CMP-2024-003", title: "Severe cracks along NH-48", location: "NH-48, Delhi-Gurugram", status: "resolved", severity: "high", issueType: "Cracking", createdAt: "2024-04-05", assignedDepartment: "NHAI Region-I" },
-  { id: 4, complaintId: "CMP-2024-004", title: "Waterlogging and surface damage", location: "GST Road, Chennai", status: "pending", severity: "medium", issueType: "Waterlogging", createdAt: "2024-04-14", assignedDepartment: "Chennai Corporation Roads" },
-  { id: 5, complaintId: "CMP-2024-005", title: "Dangerous road near hospital", location: "AIIMS Delhi Stretch", status: "escalated", severity: "critical", issueType: "Surface Damage", createdAt: "2024-04-15", assignedDepartment: "PWD Delhi" },
-  { id: 6, complaintId: "CMP-2024-006", title: "Potholes on expressway ramp", location: "Mumbai-Pune Expressway", status: "resolved", severity: "medium", issueType: "Pothole", createdAt: "2024-04-08", assignedDepartment: "MSRDC" },
+  { id: 1, complaintId: "CMP-2024-001", title: "Large pothole causing vehicle damage", location: "FC Road near Goodluck Chowk, Pune", status: "pending", severity: "high", issueType: "Pothole", createdAt: "2024-04-10", assignedDepartment: "PMC Roads Division" },
+  { id: 2, complaintId: "CMP-2024-002", title: "Broken divider on Baner Road", location: "Baner Road near Balewadi, Pune", status: "in_progress", severity: "medium", issueType: "Edge Damage", createdAt: "2024-04-12", assignedDepartment: "PMC West Zone" },
+  { id: 3, complaintId: "CMP-2024-003", title: "Missing signage on Katraj-Kondhwa stretch", location: "Katraj-Kondhwa Road, Pune", status: "resolved", severity: "low", issueType: "Signage", createdAt: "2024-04-05", assignedDepartment: "PMC South Zone" },
+  { id: 4, complaintId: "CMP-2024-004", title: "Waterlogging at Swargate underpass", location: "Swargate Underpass, Pune", status: "pending", severity: "high", issueType: "Waterlogging", createdAt: "2024-04-14", assignedDepartment: "PMC Central Zone" },
+  { id: 5, complaintId: "CMP-2024-005", title: "Damaged guardrail on Mumbai-Pune Expressway", location: "Expressway KM 55, Pune District", status: "in_progress", severity: "critical", issueType: "Edge Damage", createdAt: "2024-04-15", assignedDepartment: "MSRDC Pune" },
 ];
 
 const MOCK_STATS = {
-  byStatus: [{ status: "Pending", count: 2 }, { status: "In Progress", count: 1 }, { status: "Resolved", count: 2 }, { status: "Escalated", count: 1 }],
-  byType: [{ type: "Pothole", count: 2 }, { type: "Cracking", count: 1 }, { type: "Collapse", count: 1 }, { type: "Other", count: 2 }],
+  byStatus: [{ status: "Pending", count: 2 }, { status: "In Progress", count: 2 }, { status: "Resolved", count: 1 }],
+  byType: [{ type: "Pothole", count: 1 }, { type: "Waterlogging", count: 1 }, { type: "Edge Damage", count: 2 }, { type: "Signage", count: 1 }],
 };
 
 // Routing engine: maps road type + issue + severity → authority
@@ -43,11 +42,11 @@ const ROUTING_ENGINE: Record<string, { authority: string; engineer: string; time
 };
 
 const ROAD_AUTOFILL: Record<string, { roadType: string; authority: string; contractor: string; lastRelaying: string; budgetRef: string; jurisdiction: string }> = {
-  "MG Road": { roadType: "Urban", authority: "BBMP Roads Division", contractor: "BuildRight Infrastructure Ltd", lastRelaying: "March 2022", budgetRef: "₹12.4 Cr (FY 2022-23)", jurisdiction: "Bangalore Municipal" },
-  "NH-48": { roadType: "NH", authority: "NHAI Region-I", contractor: "RoadCraft Solutions", lastRelaying: "September 2021", budgetRef: "₹48.2 Cr (FY 2021-22)", jurisdiction: "National" },
-  "Andheri-Kurla": { roadType: "Urban", authority: "MCGM Roads Dept", contractor: "RoadCraft Solutions", lastRelaying: "June 2020", budgetRef: "₹68.3 Cr (FY 2020-21)", jurisdiction: "Mumbai Municipal" },
-  "AIIMS Delhi": { roadType: "Urban", authority: "PWD Delhi", contractor: "QuickFix Road Services", lastRelaying: "January 2023", budgetRef: "₹8.9 Cr (FY 2022-23)", jurisdiction: "Delhi PWD" },
-  "GST Road": { roadType: "SH", authority: "TNRDC", contractor: "BuildRight Infrastructure Ltd", lastRelaying: "December 2021", budgetRef: "₹22.1 Cr (FY 2021-22)", jurisdiction: "Tamil Nadu State" },
+  "FC Road": { roadType: "Urban", authority: "PMC Roads Division", contractor: "Pune Municipal Corp Road Dept", lastRelaying: "January 2023", budgetRef: "₹3.2 Cr (FY 2022-23)", jurisdiction: "Pune Municipal" },
+  "Baner": { roadType: "Urban", authority: "PMC West Zone", contractor: "MSRDC Pune", lastRelaying: "August 2022", budgetRef: "₹5.8 Cr (FY 2022-23)", jurisdiction: "Pune Municipal" },
+  "Katraj": { roadType: "Urban", authority: "PMC South Zone", contractor: "PWD Maharashtra Pune Division", lastRelaying: "October 2021", budgetRef: "₹2.1 Cr (FY 2021-22)", jurisdiction: "Pune Municipal" },
+  "Swargate": { roadType: "Urban", authority: "PMC Central Zone", contractor: "Pune Municipal Corp Road Dept", lastRelaying: "March 2022", budgetRef: "₹4.5 Cr (FY 2022-23)", jurisdiction: "Pune Municipal" },
+  "Expressway": { roadType: "NH", authority: "MSRDC Pune", contractor: "National Highways Authority Pune Zone", lastRelaying: "June 2022", budgetRef: "₹28.6 Cr (FY 2022-23)", jurisdiction: "State-National" },
 };
 
 function getRouting(roadType: string, severity: string) {
@@ -100,7 +99,7 @@ function NewComplaintModal({ onClose }: { onClose: () => void }) {
 
   const submit = async () => {
     try {
-      await create.mutateAsync({ ...form, title: form.title || form.issueType });
+      await create.mutateAsync({ data: { ...form, title: form.title || form.issueType } });
     } catch { /* swallow – use local result */ }
     const id = `CMP-${Date.now().toString().slice(-6)}`;
     setResult({ complaintId: id, ...routing });
@@ -217,7 +216,7 @@ function NewComplaintModal({ onClose }: { onClose: () => void }) {
           {/* Location with autofill */}
           <div>
             <label className="block text-sm font-medium mb-1.5 text-muted-foreground">Road Name / Location</label>
-            <input value={form.location} onChange={set("location")} placeholder="e.g. MG Road, NH-48, Andheri-Kurla..." className={inputCls} style={inputStyle} />
+            <input value={form.location} onChange={set("location")} placeholder="e.g. FC Road, Baner Road, Katraj Ghat..." className={inputCls} style={inputStyle} />
           </div>
 
           {/* Smart autofill result */}

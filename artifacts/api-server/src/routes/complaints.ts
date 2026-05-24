@@ -8,10 +8,10 @@ const router = Router();
 router.get("/complaints", async (req, res) => {
   try {
     const result = await db.select().from(complaints).orderBy(complaints.createdAt);
-    res.json(result);
+    return res.json(result);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to fetch complaints" });
+    return res.status(500).json({ error: "Failed to fetch complaints" });
   }
 });
 
@@ -24,20 +24,10 @@ router.post("/complaints", async (req, res) => {
       reportedBy: reportedBy ?? "anonymous", status: "pending",
       assignedDepartment: "Roads Department",
     }).returning();
-    res.status(201).json(result);
+    return res.status(201).json(result);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Failed to create complaint" });
-  }
-});
-
-router.get("/complaints/:id", async (req, res) => {
-  try {
-    const [result] = await db.select().from(complaints).where(eq(complaints.id, Number(req.params.id))).limit(1);
-    if (!result) return res.status(404).json({ error: "Complaint not found" });
-    res.json(result);
-  } catch (err) {
-    res.status(500).json({ error: "Failed" });
+    return res.status(500).json({ error: "Failed to create complaint" });
   }
 });
 
@@ -45,14 +35,24 @@ router.get("/complaints/stats", async (req, res) => {
   try {
     const all = await db.select().from(complaints);
     const byStatus = Object.entries(all.reduce((acc: any, c) => {
-      acc[c.status] = (acc[c.status] ?? 0) + 1; return acc;
+      const s = c.status ?? "unknown"; acc[s] = (acc[s] ?? 0) + 1; return acc;
     }, {})).map(([status, count]) => ({ status, count }));
     const byType = Object.entries(all.reduce((acc: any, c) => {
       const t = c.issueType ?? "Other"; acc[t] = (acc[t] ?? 0) + 1; return acc;
     }, {})).map(([type, count]) => ({ type, count }));
-    res.json({ byStatus, byType });
+    return res.json({ byStatus, byType });
   } catch (err) {
-    res.status(500).json({ error: "Failed" });
+    return res.status(500).json({ error: "Failed" });
+  }
+});
+
+router.get("/complaints/:id", async (req, res) => {
+  try {
+    const [result] = await db.select().from(complaints).where(eq(complaints.id, Number(req.params.id))).limit(1);
+    if (!result) return res.status(404).json({ error: "Complaint not found" });
+    return res.json(result);
+  } catch (err) {
+    return res.status(500).json({ error: "Failed" });
   }
 });
 

@@ -3,14 +3,12 @@ import { TrendingDown, AlertTriangle, MapPin, Clock } from "lucide-react";
 import { getRiskColor } from "@/lib/utils";
 
 const MOCK_RISK_MAP = [
-  { id: 1, roadId: 7, roadName: "AIIMS Delhi Stretch", latitude: 28.5672, longitude: 77.2100, riskScore: 97, riskLevel: "critical", predictedFailureIn: "2-5 days", reason: "Sensor data shows extreme vibration (9.8/10). Health score 22/100. Contractor suspended." },
-  { id: 2, roadId: 4, roadName: "Andheri-Kurla Road", latitude: 19.1136, longitude: 72.8697, riskScore: 94, riskLevel: "critical", predictedFailureIn: "3-7 days", reason: "8 repair cycles in 9 years. Current health 28/100. AI detects likely collapse zone." },
-  { id: 3, roadId: 2, roadName: "NH-48 Stretch", latitude: 28.4595, longitude: 77.0266, riskScore: 78, riskLevel: "high", predictedFailureIn: "2-3 weeks", reason: "5 failures in 3 years. Rising vibration trend. Contractor flagged for corruption." },
-  { id: 4, roadId: 1, roadName: "MG Road", latitude: 12.9716, longitude: 77.5946, riskScore: 45, riskLevel: "medium", predictedFailureIn: "1-2 months", reason: "Gradual health decline. Pothole clusters forming. Second repair cycle likely needed." },
-  { id: 5, roadId: 6, roadName: "GST Road", latitude: 12.8825, longitude: 80.1014, riskScore: 32, riskLevel: "medium", predictedFailureIn: "2-3 months", reason: "Moderate wear pattern. Drainage issues observed. Seasonal risk during monsoon." },
-  { id: 6, roadId: 3, roadName: "Outer Ring Road South", latitude: 12.9141, longitude: 77.6200, riskScore: 8, riskLevel: "low", predictedFailureIn: "12+ months", reason: "Excellent condition. High-quality construction. No concerns identified." },
-  { id: 7, roadId: 5, roadName: "Electronic City Flyover", latitude: 12.8399, longitude: 77.6770, riskScore: 5, riskLevel: "low", predictedFailureIn: "12+ months", reason: "Near-optimal health. Premium construction by top-rated contractor." },
-  { id: 8, roadId: 8, roadName: "Mumbai-Pune Expressway Sec-3", latitude: 18.5204, longitude: 73.8567, riskScore: 9, riskLevel: "low", predictedFailureIn: "12+ months", reason: "Well-maintained expressway. Regular preventive maintenance in place." },
+  { id: 1, roadId: 3, roadName: "NH-48 near Khopoli", latitude: 18.789, longitude: 73.348, riskScore: 94, riskLevel: "critical", predictedFailureIn: "3-7 days", reason: "15 incidents recorded. Sensor S-03 shows extreme vibration (9.1/10). Predicted crack formation." },
+  { id: 2, roadId: 1, roadName: "Katraj Ghat, Pune", latitude: 18.453, longitude: 73.868, riskScore: 88, riskLevel: "critical", predictedFailureIn: "5-10 days", reason: "12 incidents Jan–Mar 2024. Consistent stress pattern on ghat section." },
+  { id: 3, roadId: 5, roadName: "Nashik Phata, Pimpri", latitude: 18.627, longitude: 73.802, riskScore: 72, riskLevel: "high", predictedFailureIn: "2-3 weeks", reason: "9 incidents recorded. Heavy commercial traffic causing rapid surface wear." },
+  { id: 4, roadId: 6, roadName: "Mumbai-Pune Expressway KM 42", latitude: 18.591, longitude: 73.423, riskScore: 68, riskLevel: "high", predictedFailureIn: "3-4 weeks", reason: "11 incidents. Guardrail damage zone. Shoulder erosion detected by sensors." },
+  { id: 5, roadId: 2, roadName: "Hadapsar Junction, Pune", latitude: 18.508, longitude: 73.925, riskScore: 42, riskLevel: "medium", predictedFailureIn: "2-3 months", reason: "8 incidents. Signal junction stress. Patchwork repairs needed." },
+  { id: 6, roadId: 4, roadName: "Swargate Circle, Pune", latitude: 18.501, longitude: 73.863, riskScore: 35, riskLevel: "medium", predictedFailureIn: "3-4 months", reason: "5 incidents. Underpass waterlogging risk during monsoon." },
 ];
 
 function RiskBadge({ level }: { level: string }) {

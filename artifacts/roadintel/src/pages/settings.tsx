@@ -1,13 +1,57 @@
-import { useState } from "react";
-import { Bell, Globe, Shield, Eye, Database, Download } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Bell, Globe, Shield, Eye, Download, CheckCircle } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+
+type Profile = { name: string; email: string; role: string };
+
+function loadProfile(): Profile {
+  if (typeof window === "undefined") return { name: "", email: "", role: "" };
+  try {
+    const raw = localStorage.getItem("roadintel_profile");
+    return raw ? JSON.parse(raw) as Profile : { name: "", email: "", role: "" };
+  } catch { return { name: "", email: "", role: "" }; }
+}
+
+function saveProfile(data: { name: string; email: string; role: string }) {
+  if (typeof window !== "undefined") localStorage.setItem("roadintel_profile", JSON.stringify(data));
+}
+
+function loadTheme(): "dark" | "light" {
+  if (typeof window === "undefined") return "dark";
+  const saved = localStorage.getItem("roadintel_theme");
+  if (saved === "light" || saved === "dark") return saved;
+  return "dark";
+}
+
+function applyTheme(theme: "dark" | "light") {
+  const root = document.documentElement;
+  if (theme === "dark") root.classList.add("dark");
+  else root.classList.remove("dark");
+}
 
 export default function Settings() {
+  const { t, lang, setLang } = useLanguage();
+  const [profile, setProfile] = useState<Profile>(loadProfile);
+  const [savedMsg, setSavedMsg] = useState(false);
+  const [theme, setThemeState] = useState<"dark" | "light">(loadTheme);
   const [notifComplaints, setNotifComplaints] = useState(true);
   const [notifSensor, setNotifSensor] = useState(true);
   const [notifBudget, setNotifBudget] = useState(true);
-  const [language, setLanguage] = useState("en");
-  const [theme, setTheme] = useState("dark");
-  const [location, setLocation] = useState("Mumbai, MH");
+
+  useEffect(() => {
+    applyTheme(theme);
+  }, [theme]);
+
+  const setTheme = (t: "dark" | "light") => {
+    setThemeState(t);
+    if (typeof window !== "undefined") localStorage.setItem("roadintel_theme", t);
+  };
+
+  const handleSave = () => {
+    saveProfile(profile);
+    setSavedMsg(true);
+    setTimeout(() => setSavedMsg(false), 3000);
+  };
 
   function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) => void }) {
     return (
@@ -24,32 +68,42 @@ export default function Settings() {
   return (
     <div className="p-6 space-y-6 max-w-2xl">
       <div>
-        <h1 className="text-2xl font-bold" style={{ fontFamily: "Sora, sans-serif" }}>Settings</h1>
-        <p className="text-sm text-muted-foreground mt-1">Manage your profile and platform preferences</p>
+        <h1 className="text-2xl font-bold" style={{ fontFamily: "Sora, sans-serif" }}>{t("page_title_settings")}</h1>
+        <p className="text-sm text-muted-foreground mt-1">{t("page_subtitle_settings")}</p>
       </div>
 
       {/* Profile */}
       <div className="p-5 rounded-2xl" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}>
         <div className="flex items-center gap-3 mb-4">
           <Shield className="w-4 h-4" style={{ color: "#0EA5A4" }} />
-          <h3 className="font-semibold" style={{ fontFamily: "Sora, sans-serif" }}>Profile</h3>
+          <h3 className="font-semibold" style={{ fontFamily: "Sora, sans-serif" }}>{t("settings_profile")}</h3>
         </div>
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs text-muted-foreground mb-1 block">Full Name</label>
-              <input defaultValue="Demo User" className="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--muted))", border: "1px solid hsl(var(--border))" }} />
+              <label className="text-xs text-muted-foreground mb-1 block">{t("settings_name")}</label>
+              <input value={profile.name} onChange={e => setProfile(p => ({ ...p, name: e.target.value }))}
+                className="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--muted))", border: "1px solid hsl(var(--border))" }} />
             </div>
             <div>
-              <label className="text-xs text-muted-foreground mb-1 block">Mobile</label>
-              <input defaultValue="+91 9876543210" className="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--muted))", border: "1px solid hsl(var(--border))" }} />
+              <label className="text-xs text-muted-foreground mb-1 block">{t("settings_email")}</label>
+              <input value={profile.email} onChange={e => setProfile(p => ({ ...p, email: e.target.value }))}
+                className="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--muted))", border: "1px solid hsl(var(--border))" }} />
             </div>
           </div>
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">Location</label>
-            <input value={location} onChange={e => setLocation(e.target.value)} className="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--muted))", border: "1px solid hsl(var(--border))" }} />
+            <label className="text-xs text-muted-foreground mb-1 block">{t("settings_role")}</label>
+            <input value={profile.role} onChange={e => setProfile(p => ({ ...p, role: e.target.value }))} placeholder="e.g. Citizen, Engineer, Journalist"
+              className="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--muted))", border: "1px solid hsl(var(--border))" }} />
           </div>
-          <button className="px-4 py-2 rounded-xl text-sm font-medium text-white" style={{ background: "#0EA5A4" }}>Save Profile</button>
+          <div className="flex items-center gap-3">
+            <button onClick={handleSave} className="px-4 py-2 rounded-xl text-sm font-medium text-white" style={{ background: "#0EA5A4" }}>{t("btn_save")}</button>
+            {savedMsg && (
+              <span className="flex items-center gap-1.5 text-xs font-semibold" style={{ color: "#16A34A" }}>
+                <CheckCircle className="w-3.5 h-3.5" /> {t("settings_save_success")}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -66,10 +120,7 @@ export default function Settings() {
             { label: "Budget Alerts", sub: "Suspicious spending patterns flagged by AI", value: notifBudget, onChange: setNotifBudget },
           ].map(({ label, sub, value, onChange }) => (
             <div key={label} className="flex items-center justify-between">
-              <div>
-                <div className="text-sm font-medium">{label}</div>
-                <div className="text-xs text-muted-foreground">{sub}</div>
-              </div>
+              <div><div className="text-sm font-medium">{label}</div><div className="text-xs text-muted-foreground">{sub}</div></div>
               <Toggle value={value} onChange={onChange} />
             </div>
           ))}
@@ -80,22 +131,22 @@ export default function Settings() {
       <div className="p-5 rounded-2xl" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}>
         <div className="flex items-center gap-3 mb-4">
           <Globe className="w-4 h-4" style={{ color: "#0EA5A4" }} />
-          <h3 className="font-semibold" style={{ fontFamily: "Sora, sans-serif" }}>Preferences</h3>
+          <h3 className="font-semibold" style={{ fontFamily: "Sora, sans-serif" }}>{t("settings_theme")} & {t("settings_language")}</h3>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">Language</label>
-            <select value={language} onChange={e => setLanguage(e.target.value)} className="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--muted))", border: "1px solid hsl(var(--border))" }}>
+            <label className="text-xs text-muted-foreground mb-1 block">{t("settings_language")}</label>
+            <select value={lang} onChange={e => setLang(e.target.value as any)}
+              className="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--muted))", border: "1px solid hsl(var(--border))" }}>
               <option value="en">English</option>
-              <option value="hi">Hindi</option>
-              <option value="mr">Marathi</option>
-              <option value="kn">Kannada</option>
-              <option value="ta">Tamil</option>
+              <option value="hi">हिन्दी</option>
+              <option value="mr">मराठी</option>
             </select>
           </div>
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">Theme</label>
-            <select value={theme} onChange={e => setTheme(e.target.value)} className="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--muted))", border: "1px solid hsl(var(--border))" }}>
+            <label className="text-xs text-muted-foreground mb-1 block">{t("settings_theme")}</label>
+            <select value={theme} onChange={e => setTheme(e.target.value as any)}
+              className="w-full px-3 py-2.5 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--muted))", border: "1px solid hsl(var(--border))" }}>
               <option value="dark">Dark</option>
               <option value="light">Light</option>
             </select>
@@ -115,9 +166,6 @@ export default function Settings() {
             <button className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm" style={{ background: "hsl(var(--muted))" }}>
               <Download className="w-4 h-4" /> Export My Data
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm" style={{ background: "#DC262618", color: "#DC2626" }}>
-              Delete Account
-            </button>
           </div>
         </div>
       </div>
@@ -125,9 +173,9 @@ export default function Settings() {
       {/* System info */}
       <div className="p-4 rounded-2xl" style={{ background: "hsl(var(--muted))" }}>
         <div className="text-xs text-muted-foreground space-y-1">
-          <div>Platform Version: RoadIntel v2.4.1</div>
-          <div>Demo Mode Active — Production data not connected</div>
-          <div>Built for Hackathon 2025</div>
+          <div>Platform Version: RoadIntel Pilot v1.0</div>
+          <div>Pune Metropolitan Zone — Maharashtra Road Safety Initiative</div>
+          <div>Built for National Hackathon 2025</div>
         </div>
       </div>
     </div>

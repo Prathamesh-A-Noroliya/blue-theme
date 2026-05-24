@@ -1,0 +1,153 @@
+PASS 1 — CODE QUALITY CLEANUP
+- Remove unused imports, variables, console.logs, dead code
+- Fix any obvious TypeScript errors
+- Do not restructure or rename anything
+- Only touch files with real problems
+
+---
+
+PASS 2 — REPLACE ALL DATA WITH REALISTIC PUNE/MAHARASHTRA PILOT DATA
+
+This is critical for hackathon credibility. Replace all fake/generic data with:
+
+ACCIDENT DATA (max 6 records):
+- Katraj Ghat, Pune — 12 incidents (Jan–Mar 2024), High Risk
+- Hadapsar Junction, Pune — 8 incidents, Medium Risk  
+- NH-48 near Khopoli — 15 incidents, Critical
+- Swargate Circle, Pune — 5 incidents, Medium Risk
+- Nashik Phata, Pimpri — 9 incidents, High Risk
+- Mumbai-Pune Expressway KM 42 — 11 incidents, High Risk
+
+COMPLAINTS DATA (max 5 records):
+- Pothole complaint: FC Road near Goodluck Chowk — Pending
+- Broken divider: Baner Road near Balewadi — In Progress
+- Missing signage: Katraj–Kondhwa stretch — Resolved
+- Waterlogging: Swargate underpass — Pending
+- Damaged guardrail: Expressway KM 55 — In Progress
+
+SENSORS DATA (max 5 records):
+- Sensor S-01: Katraj Tunnel entrance — Active
+- Sensor S-02: Hadapsar Junction — Offline
+- Sensor S-03: NH-48 Khopoli — Active
+- Sensor S-04: Baner Road — Active  
+- Sensor S-05: Nashik Phata — Maintenance
+
+CONTRACTORS (max 4):
+- Pune Municipal Corporation (PMC) Road Dept
+- Maharashtra State Road Development Corporation (MSRDC)
+- National Highways Authority of India (NHAI) — Pune Zone
+- PWD Maharashtra — Pune Division
+
+DASHBOARD STATS:
+- Total Complaints: 847 (Pune Pilot Zone)
+- Active Sensors: 12 of 15
+- High Risk Zones: 6
+- Resolved Issues: 234 this month
+- Budget Utilized: ₹2.3 Cr of ₹5 Cr
+
+Use labels: "Pune Pilot Zone", "Maharashtra Demo View", "Sample Data — Pilot Phase"
+Keep all place names real and believable.
+
+---
+
+PASS 3 — LANGUAGE TRANSLATION SYSTEM
+
+Create src/context/LanguageContext.tsx:
+- Languages: English (en), Hindi (hi), Marathi (mr) ONLY
+- Export LanguageProvider, useLanguage hook, t("key") function
+- Save to localStorage key: "roadintel_lang"
+- Load from localStorage on startup
+
+Create src/translations.ts with these keys translated in all 3 languages:
+
+nav_dashboard, nav_complaints, nav_sensors, nav_riskmap, 
+nav_contractors, nav_spending, nav_settings, nav_reports,
+page_title_dashboard, page_title_complaints, page_title_sensors,
+page_title_riskmap, page_title_settings,
+btn_save, btn_cancel, btn_view, btn_update, btn_apply, 
+btn_search, btn_submit, btn_export, btn_markread,
+lbl_status, lbl_location, lbl_risk, lbl_date, lbl_type,
+lbl_active, lbl_offline, lbl_pending, lbl_resolved, lbl_inprogress,
+lbl_high, lbl_medium, lbl_low, lbl_critical,
+dashboard_complaints, dashboard_sensors, dashboard_riskzones,
+dashboard_resolved, dashboard_budget,
+settings_profile, settings_theme, settings_language,
+settings_save_success, settings_name, settings_email, settings_role,
+notif_title, notif_markread, notif_empty,
+empty_no_data, empty_no_complaints, empty_loading,
+pilot_label, demo_label
+
+Wrap App in LanguageProvider.
+Apply t("key") across ALL page components and sidebar.
+
+---
+
+PASS 4 — SETTINGS PAGE (fully functional)
+
+Edit Settings page only:
+- Profile form: Name, Email, Role fields
+- Save Profile button:
+  → save to localStorage key "roadintel_profile"
+  → show green inline message: t("settings_save_success")
+  → message disappears after 3 seconds
+- Theme toggle (Light/Dark):
+  → toggle class "dark" on <html> element
+  → save to localStorage key "roadintel_theme"
+  → load and apply on app startup in main.tsx or App.tsx
+- Language selector:
+  → show ONLY: English, Hindi, Marathi
+  → on change: call setLanguage() from LanguageContext
+  → entire website UI updates immediately
+- Apply t("key") to all text on this page
+
+---
+
+PASS 5 — NOTIFICATION BELL (fully functional)
+
+Edit header/navbar component only:
+- Bell icon → click toggles dropdown panel
+- Panel shows exactly these 4 notifications:
+  1. "New pothole complaint filed — FC Road, Pune" (2 min ago)
+  2. "Sensor S-02 went offline — Hadapsar Junction" (1 hr ago)
+  3. "Risk alert issued — NH-48 near Khopoli" (3 hrs ago)
+  4. "Contractor report submitted — Swargate flyover repair" (Yesterday)
+- Show red badge with count "4" on bell icon
+- "Mark all as read" button → removes badge → fades notification dots
+- Click outside panel → close panel
+- Use t("notif_title"), t("btn_markread") for translated labels
+
+---
+
+PASS 6 — HACKATHON-QUALITY UI POLISH
+
+This pass is critical. Make the website look like a serious road-safety 
+intelligence platform built for government/civic use.
+
+HERO / DASHBOARD PAGE:
+- Add a clean prominent header: 
+  "RoadIntel — Pune Road Safety Intelligence Platform"
+  Subtitle: "Pilot Phase | Pune Metropolitan Zone | Powered by real-time sensor & complaint data"
+- Add a small "Pilot Data" badge/chip near stats
+- Dashboard cards must be clean, icon-supported, clearly labeled
+- Add one simple bar or line chart showing monthly complaints trend 
+  (use recharts or chart.js if already installed, else use pure CSS bars)
+  Data: Jan 42, Feb 38, Mar 55, Apr 49, May 61, Jun 47 (Pune Pilot Zone)
+
+RISK MAP PAGE:
+- If map exists: label it "Pune Road Risk Map — Pilot View"
+- Add a legend: Critical / High / Medium / Low with color dots
+- Add note: "Based on complaint density and sensor alerts"
+
+ALL PAGES:
+- Add short 1-line description under each page title explaining what the page shows
+- Example: "Complaints — Track and manage road condition reports from Pune pilot zone"
+- Remove any page that is completely empty or broken
+- Replace all placeholder/lorem text
+
+SIDEBAR/NAV:
+- Add "RoadIntel" logo text with a small road/shield icon (use lucide-react if available)
+- Add a small "Pilot v1.0" version badge at the bottom of sidebar
+- Make active nav item visually distinct (highlighted)
+
+FOOTER OR BOTTOM NOTE (subtle):
+- Add one small line: "RoadIntel Pilot — Maharashtra Road Safety Initiative | Demo Data"

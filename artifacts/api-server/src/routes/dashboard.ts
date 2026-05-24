@@ -26,12 +26,12 @@ router.get("/dashboard/summary", async (req, res) => {
 
 router.get("/dashboard/recent-activity", async (req, res) => {
   res.json([
-    { id: 1, message: "Critical road failure detected on AIIMS Delhi Stretch", location: "Delhi", timestamp: "2 min ago", severity: "critical" },
-    { id: 2, message: "New complaint filed: Large pothole on MG Road", location: "Bangalore", timestamp: "8 min ago", severity: "high" },
-    { id: 3, message: "Corruption pattern detected: RoadCraft Solutions flagged", location: "National", timestamp: "25 min ago", severity: "high" },
-    { id: 4, message: "Sensor anomaly: Andheri-Kurla Road vibration spike", location: "Mumbai", timestamp: "1 hr ago", severity: "critical" },
-    { id: 5, message: "Repair verified on Electronic City Flyover", location: "Bangalore", timestamp: "2 hr ago", severity: "info" },
-    { id: 6, message: "Budget overrun detected: NH-48 stretch exceeded 12%", location: "Delhi-NCR", timestamp: "3 hr ago", severity: "medium" },
+    { id: 1, message: "Critical alert: Katraj Ghat health score dropped to 38/100", location: "Pune", timestamp: "2 min ago", severity: "critical" },
+    { id: 2, message: "New complaint filed: Large pothole on FC Road near Goodluck Chowk", location: "Pune", timestamp: "8 min ago", severity: "high" },
+    { id: 3, message: "Corruption pattern detected: PWD Pune Division flagged", location: "Pune", timestamp: "25 min ago", severity: "high" },
+    { id: 4, message: "Sensor offline: Hadapsar Junction S-02 needs maintenance", location: "Pune", timestamp: "1 hr ago", severity: "critical" },
+    { id: 5, message: "Repair verified on Swargate Circle flyover", location: "Pune", timestamp: "2 hr ago", severity: "info" },
+    { id: 6, message: "Budget overrun: NH-48 near Khopoli exceeded 12%", location: "Khopoli", timestamp: "3 hr ago", severity: "medium" },
   ]);
 });
 

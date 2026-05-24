@@ -1,27 +1,27 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import {
   LayoutDashboard, FileText, Scan, Map, TrendingDown, Wallet,
   Radio, Users, BarChart3, Settings, Bell, Menu, X, ChevronRight,
-  AlertTriangle, Shield, Activity, Siren, Bot, CreditCard, Globe
+  Shield, Activity, Siren, Bot, CreditCard, Globe
 } from "lucide-react";
-import { useListNotifications } from "@workspace/api-client-react";
+import { useLanguage } from "@/context/LanguageContext";
 import { ChatbotPanel } from "@/components/chatbot-panel";
 
 const navItems = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard, group: "main" },
-  { label: "File Complaint", href: "/complaints", icon: FileText, group: "main" },
-  { label: "Quick Scan", href: "/scan", icon: Scan, group: "main" },
-  { label: "AI Assistant", href: "/assistant", icon: Bot, group: "main", badge: "AI" },
-  { label: "Road DNA", href: "/roads", icon: Map, group: "intel" },
-  { label: "Risk Map", href: "/risk-map", icon: TrendingDown, group: "intel" },
-  { label: "Public Spending", href: "/spending", icon: Wallet, group: "intel" },
-  { label: "Sensor Intel", href: "/sensors", icon: Radio, group: "intel", badge: "LIVE" },
-  { label: "Contractors", href: "/contractors", icon: Users, group: "intel" },
-  { label: "Analytics", href: "/analytics", icon: BarChart3, group: "intel" },
-  { label: "Emergency SOS", href: "/sos", icon: Siren, group: "emergency", badge: "SOS" },
-  { label: "Subscribe", href: "/subscribe", icon: CreditCard, group: "account" },
-  { label: "Settings", href: "/settings", icon: Settings, group: "account" },
+  { key: "nav_dashboard", href: "/dashboard", icon: LayoutDashboard, group: "main" },
+  { key: "nav_complaints", href: "/complaints", icon: FileText, group: "main" },
+  { key: "nav_scan", href: "/scan", icon: Scan, group: "main" },
+  { key: "nav_assistant", href: "/assistant", icon: Bot, group: "main", badge: "AI" },
+  { key: "nav_roads", href: "/roads", icon: Map, group: "intel" },
+  { key: "nav_riskmap", href: "/risk-map", icon: TrendingDown, group: "intel" },
+  { key: "nav_spending", href: "/spending", icon: Wallet, group: "intel" },
+  { key: "nav_sensors", href: "/sensors", icon: Radio, group: "intel", badge: "LIVE" },
+  { key: "nav_contractors", href: "/contractors", icon: Users, group: "intel" },
+  { key: "nav_analytics", href: "/analytics", icon: BarChart3, group: "intel" },
+  { key: "nav_sos", href: "/sos", icon: Siren, group: "emergency", badge: "SOS" },
+  { key: "nav_subscribe", href: "/subscribe", icon: CreditCard, group: "account" },
+  { key: "nav_settings", href: "/settings", icon: Settings, group: "account" },
 ];
 
 const BADGE_COLORS: Record<string, { bg: string; color: string }> = {
@@ -30,19 +30,40 @@ const BADGE_COLORS: Record<string, { bg: string; color: string }> = {
   SOS: { bg: "rgba(229,57,53,0.2)", color: "#E53935" },
 };
 
-const GROUPS = [
-  { key: "main", label: "Navigation" },
-  { key: "intel", label: "Intelligence" },
-  { key: "emergency", label: "Emergency" },
-  { key: "account", label: "Account" },
+const NOTIFICATIONS = [
+  { id: 1, title: "New pothole complaint filed — FC Road, Pune", time: "2 min ago", read: false, severity: "high" },
+  { id: 2, title: "Sensor S-02 went offline — Hadapsar Junction", time: "1 hr ago", read: false, severity: "critical" },
+  { id: 3, title: "Risk alert issued — NH-48 near Khopoli", time: "3 hrs ago", read: false, severity: "high" },
+  { id: 4, title: "Contractor report submitted — Swargate flyover repair", time: "Yesterday", read: false, severity: "info" },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const { t, lang } = useLanguage();
   const [location] = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
-  const { data: notifications } = useListNotifications();
-  const unreadCount = notifications?.filter((n) => !n.read).length ?? 0;
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [notifs, setNotifs] = useState(NOTIFICATIONS);
+  const notifRef = useRef<HTMLDivElement>(null);
+
+  const unreadCount = notifs.filter(n => !n.read).length;
+
+  useEffect(() => {
+    function onClick(e: MouseEvent) {
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) setNotifOpen(false);
+    }
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
+  const markAllRead = () => setNotifs(prev => prev.map(n => ({ ...n, read: true })));
+
+  const groupLabels: Record<string, string> = {
+    main: t("group_navigation"),
+    intel: t("group_intelligence"),
+    emergency: t("group_emergency"),
+    account: t("group_account"),
+  };
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
@@ -58,7 +79,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
           <div>
             <div className="font-bold text-sm" style={{ fontFamily: "Sora, sans-serif", color: "hsl(var(--sidebar-foreground))" }}>RoadIntel</div>
-            <div className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>v2.5.0 LIVE</div>
+            <div className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>{t("pilot_version")}</div>
           </div>
           <button className="ml-auto lg:hidden" onClick={() => setSidebarOpen(false)} style={{ color: "hsl(var(--sidebar-foreground))" }}>
             <X className="w-5 h-5" />
@@ -67,53 +88,48 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
-          {GROUPS.map(group => {
-            const items = navItems.filter(n => n.group === group.key);
-            return (
-              <div key={group.key}>
-                <div className="px-2 py-1 text-xs font-semibold uppercase tracking-widest" style={{ color: "hsl(var(--muted-foreground))" }}>
-                  {group.label}
-                </div>
-                <div className="space-y-0.5 mt-1">
-                  {items.map(({ label, href, icon: Icon, badge }) => {
-                    const active = location === href;
-                    const badgeStyle = badge ? BADGE_COLORS[badge] : null;
-                    return (
-                      <Link key={href} href={href}>
-                        <div
-                          className="sidebar-item"
-                          style={active ? {
-                            background: "hsl(var(--sidebar-primary) / 0.15)",
-                            color: "hsl(var(--sidebar-primary))",
-                            borderLeft: "3px solid hsl(var(--sidebar-primary))",
-                          } : {}}
-                          onClick={() => setSidebarOpen(false)}
-                        >
-                          <Icon className="w-4 h-4 shrink-0" style={label === "Emergency SOS" ? { color: active ? undefined : "#E53935" } : {}} />
-                          <span>{label}</span>
-                          {active && !badge && <ChevronRight className="w-3 h-3 ml-auto" />}
-                          {badge && badgeStyle && (
-                            <span className="ml-auto text-xs px-1.5 py-0.5 rounded-full font-semibold"
-                              style={{ background: badgeStyle.bg, color: badgeStyle.color }}>
-                              {badge}
-                            </span>
-                          )}
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
+          {["main", "intel", "emergency", "account"].map(gkey => (
+            <div key={gkey}>
+              <div className="px-2 py-1 text-xs font-semibold uppercase tracking-widest" style={{ color: "hsl(var(--muted-foreground))" }}>
+                {groupLabels[gkey]}
               </div>
-            );
-          })}
+              <div className="space-y-0.5 mt-1">
+                {navItems.filter(n => n.group === gkey).map(({ key, href, icon: Icon, badge }) => {
+                  const active = location === href;
+                  const badgeStyle = badge ? BADGE_COLORS[badge] : null;
+                  return (
+                    <Link key={href} href={href}>
+                      <div
+                        className="sidebar-item"
+                        style={active ? {
+                          background: "hsl(var(--sidebar-primary) / 0.15)",
+                          color: "hsl(var(--sidebar-primary))",
+                          borderLeft: "3px solid hsl(var(--sidebar-primary))",
+                        } : {}}
+                        onClick={() => setSidebarOpen(false)}
+                      >
+                        <Icon className="w-4 h-4 shrink-0" style={key === "nav_sos" ? { color: active ? undefined : "#E53935" } : {}} />
+                        <span>{t(key)}</span>
+                        {active && !badge && <ChevronRight className="w-3 h-3 ml-auto" />}
+                        {badge && badgeStyle && (
+                          <span className="ml-auto text-xs px-1.5 py-0.5 rounded-full font-semibold"
+                            style={{ background: badgeStyle.bg, color: badgeStyle.color }}>{badge}</span>
+                        )}
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
         {/* Language quick picker */}
         <div className="px-4 py-2 border-t" style={{ borderColor: "hsl(var(--sidebar-border))" }}>
           <div className="flex items-center gap-2 text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>
             <Globe className="w-3 h-3" />
-            <span>Language: EN</span>
-            <Link href="/settings"><span className="ml-auto underline cursor-pointer hover:opacity-70">Change</span></Link>
+            <span>{lang.toUpperCase()}</span>
+            <Link href="/settings"><span className="ml-auto underline cursor-pointer hover:opacity-70">{t("btn_view")}</span></Link>
           </div>
         </div>
 
@@ -121,9 +137,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <div className="px-4 py-3 border-t space-y-1" style={{ borderColor: "hsl(var(--sidebar-border))" }}>
           <div className="flex items-center gap-2 text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>
             <Activity className="w-3 h-3" style={{ color: "#16A34A" }} />
-            <span>All systems operational</span>
+            <span>{t("all_systems")}</span>
           </div>
-          <div className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>Demo Mode — Apr 2025</div>
+          <div className="text-xs" style={{ color: "hsl(var(--muted-foreground))" }}>{t("demo_label")}</div>
         </div>
       </aside>
 
@@ -138,7 +154,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <Menu className="w-5 h-5" />
           </button>
           <div className="flex-1">
-            <div className="text-xs text-muted-foreground">Welcome back, Demo User</div>
+            <div className="text-xs text-muted-foreground">{t("welcome_back")}, {(() => { try { return JSON.parse(localStorage.getItem("roadintel_profile") || "{}").name || "Demo User"; } catch { return "Demo User"; } })()}</div>
           </div>
           <div className="flex items-center gap-2">
             {/* SOS quick button */}
@@ -148,40 +164,67 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 <Siren className="w-3.5 h-3.5" /> SOS
               </button>
             </Link>
-            <div className="relative">
-              <Link href="/dashboard">
-                <button className="relative p-2 rounded-lg hover:bg-muted">
-                  <Bell className="w-5 h-5" />
-                  {unreadCount > 0 && (
-                    <span className="absolute top-1 right-1 w-4 h-4 rounded-full text-xs flex items-center justify-center text-white" style={{ background: "#DC2626" }}>
-                      {unreadCount}
-                    </span>
-                  )}
-                </button>
-              </Link>
+            {/* Notification bell */}
+            <div className="relative" ref={notifRef}>
+              <button onClick={() => setNotifOpen(!notifOpen)} className="relative p-2 rounded-lg hover:bg-muted">
+                <Bell className="w-5 h-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full text-xs flex items-center justify-center text-white font-bold" style={{ background: "#DC2626" }}>
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+              {notifOpen && (
+                <div className="absolute right-0 top-10 z-50 w-80 rounded-2xl shadow-2xl overflow-hidden" style={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }}>
+                  <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: "hsl(var(--border))" }}>
+                    <h4 className="font-semibold text-sm">{t("notif_title")}</h4>
+                    {unreadCount > 0 && (
+                      <button onClick={markAllRead} className="text-xs font-medium hover:opacity-70 transition-opacity" style={{ color: "#0EA5A4" }}>
+                        {t("notif_markread")}
+                      </button>
+                    )}
+                  </div>
+                  <div className="max-h-72 overflow-y-auto">
+                    {notifs.length === 0 ? (
+                      <div className="px-4 py-6 text-center text-sm text-muted-foreground">{t("notif_empty")}</div>
+                    ) : (
+                      notifs.map(n => (
+                        <div key={n.id} className="flex items-start gap-3 px-4 py-3 hover:bg-muted/50 transition-colors border-b" style={{ borderColor: "hsl(var(--border))", opacity: n.read ? 0.6 : 1 }}>
+                          <span className="w-2 h-2 rounded-full mt-1.5 shrink-0" style={{ background: n.severity === "critical" ? "#DC2626" : n.severity === "high" ? "#F59E0B" : "#0EA5A4" }} />
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-medium truncate">{n.title}</div>
+                            <div className="text-xs text-muted-foreground">{n.time}</div>
+                          </div>
+                          {!n.read && <span className="w-2 h-2 rounded-full shrink-0 mt-1.5" style={{ background: "#0EA5A4" }} />}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
             <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white" style={{ background: "hsl(var(--sidebar-primary))" }}>
-              D
+              {(() => { try { return (JSON.parse(localStorage.getItem("roadintel_profile") || "{}").name || "D").charAt(0).toUpperCase(); } catch { return "D"; } })()}
             </div>
           </div>
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto relative">
           {children}
         </main>
+
+        {/* Footer note */}
+        <footer className="px-4 py-2 text-center text-[10px] text-muted-foreground border-t" style={{ borderColor: "hsl(var(--border))" }}>
+          {t("footer_note")}
+        </footer>
       </div>
 
       {/* Chatbot FAB */}
-      <button
-        onClick={() => setChatOpen(true)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-lg flex items-center justify-center pulse-glow"
-        style={{ background: "hsl(var(--sidebar-primary))" }}
-        title="AI Assistant"
-      >
+      <button onClick={() => setChatOpen(true)} className="fixed bottom-10 right-6 z-50 w-14 h-14 rounded-full shadow-lg flex items-center justify-center pulse-glow"
+        style={{ background: "hsl(var(--sidebar-primary))" }} title="AI Assistant">
         <Bot className="w-6 h-6 text-white" />
       </button>
-
       {chatOpen && <ChatbotPanel onClose={() => setChatOpen(false)} />}
     </div>
   );

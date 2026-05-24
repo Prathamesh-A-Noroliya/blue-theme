@@ -5,16 +5,16 @@ import { Bot, Mic, MicOff, Send, Globe, ChevronRight, Volume2 } from "lucide-rea
 type Message = { role: "user" | "assistant"; text: string; time: string };
 
 const CHIPS = [
-  "Who is responsible for NH-48?",
-  "How much money was spent on MG Road?",
-  "When was AIIMS stretch last repaired?",
+  "Who is responsible for NH-48 near Khopoli?",
+  "How much money was spent on Katraj Ghat?",
+  "When was Swargate flyover last repaired?",
   "Show roads with repeated failures",
-  "Which contractor is most corrupt?",
+  "Which contractor has the most flags?",
   "Where should I file my complaint?",
   "Show unsafe roads near me",
-  "Explain the budget overrun on Andheri-Kurla",
-  "What is the risk level of GST Road?",
-  "Why does NH-48 keep failing?",
+  "Explain the budget overrun on Swargate flyover",
+  "What is the risk level of Katraj Ghat?",
+  "Why does NH-48 near Khopoli keep failing?",
 ];
 
 const LANGS = [

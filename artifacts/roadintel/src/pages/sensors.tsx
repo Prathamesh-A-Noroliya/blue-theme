@@ -7,35 +7,34 @@ import {
 import { Radio, Activity, AlertTriangle, TrendingUp, Zap, Play, Pause, RefreshCw } from "lucide-react";
 
 const MOCK_OVERVIEW = {
-  activeSensors: 847, roadsMonitored: 8, liveAnomalyCount: 34,
-  avgVibrationScore: 4.2, currentStressLevel: "medium", criticalZones: 3,
-  dataPointsToday: 12847, uptime: 99.7,
+  activeSensors: 12, roadsMonitored: 6, liveAnomalyCount: 3,
+  avgVibrationScore: 5.8, currentStressLevel: "medium", criticalZones: 2,
+  dataPointsToday: 2847, uptime: 99.4,
 };
 
 const MOCK_FEED = [
-  { id: 1, roadId: 2, roadName: "NH-48 Stretch", timestamp: "08:01:23", vibrationIntensity: 8.7, shockSpikes: 12, roughnessIndex: 9.8, temperature: 31.2, humidity: 65, sensorStatus: "active", damageClassification: "severe anomaly", damageProbability: 0.89 },
-  { id: 2, roadId: 4, roadName: "Andheri-Kurla Road", timestamp: "08:02:15", vibrationIntensity: 9.1, shockSpikes: 15, roughnessIndex: 11.2, temperature: 30.0, humidity: 80, sensorStatus: "critical", damageClassification: "likely failure zone", damageProbability: 0.95 },
-  { id: 3, roadId: 7, roadName: "AIIMS Delhi Stretch", timestamp: "08:03:44", vibrationIntensity: 9.8, shockSpikes: 18, roughnessIndex: 12.5, temperature: 32.1, humidity: 60, sensorStatus: "critical", damageClassification: "likely failure zone", damageProbability: 0.97 },
-  { id: 4, roadId: 1, roadName: "MG Road", timestamp: "08:04:02", vibrationIntensity: 4.2, shockSpikes: 3, roughnessIndex: 5.1, temperature: 28.5, humidity: 72, sensorStatus: "active", damageClassification: "rough road", damageProbability: 0.45 },
-  { id: 5, roadId: 6, roadName: "GST Road", timestamp: "08:05:17", vibrationIntensity: 3.8, shockSpikes: 2, roughnessIndex: 4.2, temperature: 29.5, humidity: 75, sensorStatus: "active", damageClassification: "rough road", damageProbability: 0.38 },
-  { id: 6, roadId: 3, roadName: "Outer Ring Road South", timestamp: "08:06:55", vibrationIntensity: 1.8, shockSpikes: 0, roughnessIndex: 2.1, temperature: 27.8, humidity: 68, sensorStatus: "active", damageClassification: "smooth road", damageProbability: 0.05 },
+  { id: 1, roadId: 1, roadName: "Katraj Tunnel Entrance", timestamp: "08:01:23", vibrationIntensity: 7.2, shockSpikes: 9, roughnessIndex: 8.1, temperature: 31.2, humidity: 65, sensorStatus: "active", damageClassification: "rough road", damageProbability: 0.62 },
+  { id: 2, roadId: 2, roadName: "Hadapsar Junction", timestamp: "08:02:15", vibrationIntensity: 0.0, shockSpikes: 0, roughnessIndex: 0.0, temperature: 30.0, humidity: 80, sensorStatus: "offline", damageClassification: "no data", damageProbability: 0.0 },
+  { id: 3, roadId: 3, roadName: "NH-48 near Khopoli", timestamp: "08:03:44", vibrationIntensity: 9.1, shockSpikes: 14, roughnessIndex: 10.5, temperature: 32.1, humidity: 60, sensorStatus: "critical", damageClassification: "likely failure zone", damageProbability: 0.93 },
+  { id: 4, roadId: 4, roadName: "Baner Road", timestamp: "08:04:02", vibrationIntensity: 4.2, shockSpikes: 3, roughnessIndex: 5.1, temperature: 28.5, humidity: 72, sensorStatus: "active", damageClassification: "rough road", damageProbability: 0.45 },
+  { id: 5, roadId: 5, roadName: "Nashik Phata, Pimpri", timestamp: "08:05:17", vibrationIntensity: 6.8, shockSpikes: 7, roughnessIndex: 7.4, temperature: 29.5, humidity: 75, sensorStatus: "maintenance", damageClassification: "monitoring", damageProbability: 0.55 },
 ];
 
 const MOCK_ANALYTICS = {
   vibrationTrend: Array.from({ length: 24 }, (_, i) => ({
     time: `${String(i).padStart(2, "0")}:00`,
-    "NH-48": 7 + Math.random() * 3,
-    "Andheri-Kurla": 8 + Math.random() * 2,
-    "MG Road": 3 + Math.random() * 2,
-    "Outer Ring": 1.5 + Math.random(),
+    "NH-48 Khopoli": 7 + Math.random() * 3,
+    "Katraj Tunnel": 8 + Math.random() * 2,
+    "Baner Road": 3 + Math.random() * 2,
+    "Nashik Phata": 1.5 + Math.random(),
   })),
   anomalyByRoad: [
-    { road: "AIIMS Delhi", count: 18, severity: "critical" },
-    { road: "Andheri-Kurla", count: 15, severity: "critical" },
-    { road: "NH-48", count: 12, severity: "high" },
-    { road: "MG Road", count: 6, severity: "medium" },
-    { road: "GST Road", count: 4, severity: "medium" },
-    { road: "ORR South", count: 1, severity: "low" },
+    { road: "NH-48 Khopoli", count: 15, severity: "critical" },
+    { road: "Katraj Tunnel", count: 12, severity: "critical" },
+    { road: "Nashik Phata", count: 9, severity: "high" },
+    { road: "Baner Road", count: 6, severity: "medium" },
+    { road: "Swargate", count: 5, severity: "medium" },
+    { road: "Hadapsar", count: 0, severity: "low" },
   ],
   conditionDistribution: [
     { condition: "Smooth", percentage: 25, count: 2 },
@@ -52,10 +51,10 @@ const MOCK_ANALYTICS = {
 };
 
 const MOCK_ALERTS = [
-  { id: 1, roadId: 7, roadName: "AIIMS Delhi Stretch", alertType: "Critical Anomaly", message: "Repeated high vibration detected. Likely failure imminent.", severity: "critical", timestamp: "08:03:44", resolved: false },
-  { id: 2, roadId: 4, roadName: "Andheri-Kurla Road", alertType: "Pothole Cluster", message: "Pothole cluster forming in segment 3. Road stress rising.", severity: "critical", timestamp: "08:02:15", resolved: false },
-  { id: 3, roadId: 2, roadName: "NH-48 Stretch", alertType: "Sensor Alert", message: "Abnormal shock patterns after recent repair. Quality suspect.", severity: "high", timestamp: "08:01:23", resolved: false },
-  { id: 4, roadId: 1, roadName: "MG Road", alertType: "Vibration Warning", message: "Vibration rising over past 7 days. Monitor closely.", severity: "medium", timestamp: "07:45:00", resolved: false },
+  { id: 1, roadId: 3, roadName: "NH-48 near Khopoli", alertType: "Critical Anomaly", message: "Repeated high vibration detected. Likely crack formation imminent.", severity: "critical", timestamp: "08:03:44", resolved: false },
+  { id: 2, roadId: 1, roadName: "Katraj Tunnel Entrance", alertType: "Stress Warning", message: "Vibration trend rising for 5 days. Monitor closely.", severity: "high", timestamp: "08:01:23", resolved: false },
+  { id: 3, roadId: 2, roadName: "Hadapsar Junction", alertType: "Sensor Offline", message: "Sensor S-02 has been offline for 2 hours. Maintenance dispatch required.", severity: "high", timestamp: "06:30:00", resolved: false },
+  { id: 4, roadId: 5, roadName: "Nashik Phata, Pimpri", alertType: "Maintenance", message: "Scheduled calibration in progress. Data quality may vary.", severity: "medium", timestamp: "07:00:00", resolved: false },
 ];
 
 const CONDITION_COLORS = ["#16A34A", "#0EA5A4", "#F59E0B", "#DC2626"];
@@ -98,10 +97,10 @@ export default function Sensors() {
       setLiveVibration(prev => {
         const newPoint = {
           time: new Date().toTimeString().slice(0, 5),
-          "NH-48": 6 + Math.random() * 4 + (rainfall / 100) * 2,
-          "Andheri-Kurla": 7 + Math.random() * 3 + (traffic / 100) * 2,
-          "MG Road": 3 + Math.random() * 2,
-          "Outer Ring": 1 + Math.random(),
+          "NH-48 Khopoli": 6 + Math.random() * 4 + (rainfall / 100) * 2,
+          "Katraj Tunnel": 7 + Math.random() * 3 + (traffic / 100) * 2,
+          "Baner Road": 3 + Math.random() * 2,
+          "Nashik Phata": 1 + Math.random(),
         };
         return [...prev.slice(-20), newPoint];
       });
@@ -151,9 +150,9 @@ export default function Sensors() {
             <label className="text-xs text-muted-foreground mb-1 block">Road Segment</label>
             <select value={segment} onChange={e => setSegment(e.target.value)} className="w-full px-3 py-2 rounded-xl text-sm outline-none" style={{ background: "hsl(var(--muted))", border: "1px solid hsl(var(--border))" }}>
               <option value="all">All Segments</option>
-              <option value="nh48">NH-48</option>
-              <option value="andheri">Andheri-Kurla</option>
-              <option value="mg">MG Road</option>
+              <option value="nh48">NH-48 Khopoli</option>
+              <option value="katraj">Katraj Tunnel</option>
+              <option value="baner">Baner Road</option>
             </select>
           </div>
           <div>
@@ -180,10 +179,10 @@ export default function Sensors() {
             <YAxis domain={[0, 12]} tick={{ fontSize: 10 }} />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="NH-48" stroke="#DC2626" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="Andheri-Kurla" stroke="#F59E0B" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="MG Road" stroke="#0EA5A4" strokeWidth={2} dot={false} />
-            <Line type="monotone" dataKey="Outer Ring" stroke="#16A34A" strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="NH-48 Khopoli" stroke="#DC2626" strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="Katraj Tunnel" stroke="#F59E0B" strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="Baner Road" stroke="#0EA5A4" strokeWidth={2} dot={false} />
+            <Line type="monotone" dataKey="Nashik Phata" stroke="#16A34A" strokeWidth={2} dot={false} />
           </LineChart>
         </ResponsiveContainer>
       </div>

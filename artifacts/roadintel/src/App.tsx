@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
+import { LanguageProvider } from "@/context/LanguageContext";
 import NotFound from "@/pages/not-found";
 
 import RootLayout from "@/components/layout/root-layout";
@@ -35,12 +36,9 @@ function AppRoute({ path, children }: { path: string; children: React.ReactNode 
 function Router() {
   return (
     <Switch>
-      {/* Public */}
       <Route path="/"><RootLayout><Landing /></RootLayout></Route>
       <Route path="/login"><RootLayout><Login /></RootLayout></Route>
       <Route path="/register"><RootLayout><Register /></RootLayout></Route>
-
-      {/* App */}
       <AppRoute path="/dashboard"><Dashboard /></AppRoute>
       <AppRoute path="/complaints"><Complaints /></AppRoute>
       <AppRoute path="/scan"><Scan /></AppRoute>
@@ -55,7 +53,6 @@ function Router() {
       <AppRoute path="/sos"><SOS /></AppRoute>
       <AppRoute path="/assistant"><Assistant /></AppRoute>
       <AppRoute path="/subscribe"><Subscribe /></AppRoute>
-
       <Route component={NotFound} />
     </Switch>
   );
@@ -63,16 +60,18 @@ function Router() {
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="roadintel-theme">
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-            <Router />
-          </WouterRouter>
-          <Toaster />
-        </TooltipProvider>
-      </QueryClientProvider>
-    </ThemeProvider>
+    <LanguageProvider>
+      <ThemeProvider defaultTheme="dark" storageKey="roadintel-theme">
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+              <Router />
+            </WouterRouter>
+            <Toaster />
+          </TooltipProvider>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </LanguageProvider>
   );
 }
 

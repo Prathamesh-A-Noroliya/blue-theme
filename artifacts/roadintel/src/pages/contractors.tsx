@@ -2,11 +2,10 @@ import { useListContractors } from "@workspace/api-client-react";
 import { AlertTriangle, CheckCircle, TrendingDown } from "lucide-react";
 
 const MOCK_CONTRACTORS = [
-  { id: 1, name: "BuildRight Infrastructure Ltd", roadsManaged: 12, totalContracts: 24, totalValue: 45200000, avgHealthScore: 72, trustScore: 81, failedRoads: 2, repeatFailures: 3, corruptionFlags: 0, status: "active", location: "Mumbai" },
-  { id: 2, name: "RoadCraft Solutions", roadsManaged: 8, totalContracts: 15, totalValue: 28400000, avgHealthScore: 45, trustScore: 38, failedRoads: 5, repeatFailures: 8, corruptionFlags: 3, status: "flagged", location: "Delhi" },
-  { id: 3, name: "National Road Works Corp", roadsManaged: 20, totalContracts: 38, totalValue: 92000000, avgHealthScore: 68, trustScore: 71, failedRoads: 4, repeatFailures: 6, corruptionFlags: 1, status: "active", location: "Bangalore" },
-  { id: 4, name: "Infra Prime Builders", roadsManaged: 6, totalContracts: 11, totalValue: 18700000, avgHealthScore: 83, trustScore: 88, failedRoads: 1, repeatFailures: 1, corruptionFlags: 0, status: "active", location: "Chennai" },
-  { id: 5, name: "QuickFix Road Services", roadsManaged: 15, totalContracts: 28, totalValue: 35600000, avgHealthScore: 31, trustScore: 22, failedRoads: 9, repeatFailures: 14, corruptionFlags: 7, status: "suspended", location: "Hyderabad" },
+  { id: 1, name: "Pune Municipal Corporation Road Dept", roadsManaged: 24, totalContracts: 48, totalValue: 85000000, avgHealthScore: 62, trustScore: 74, failedRoads: 3, repeatFailures: 4, corruptionFlags: 0, status: "active", location: "Pune" },
+  { id: 2, name: "Maharashtra State Road Development Corp (MSRDC)", roadsManaged: 18, totalContracts: 32, totalValue: 142000000, avgHealthScore: 58, trustScore: 68, failedRoads: 5, repeatFailures: 7, corruptionFlags: 1, status: "active", location: "Pune" },
+  { id: 3, name: "National Highways Authority of India — Pune Zone", roadsManaged: 12, totalContracts: 22, totalValue: 210000000, avgHealthScore: 55, trustScore: 71, failedRoads: 4, repeatFailures: 6, corruptionFlags: 0, status: "active", location: "Pune" },
+  { id: 4, name: "PWD Maharashtra — Pune Division", roadsManaged: 15, totalContracts: 28, totalValue: 68000000, avgHealthScore: 60, trustScore: 66, failedRoads: 4, repeatFailures: 5, corruptionFlags: 1, status: "flagged", location: "Pune" },
 ];
 
 function TrustBar({ score }: { score: number }) {
