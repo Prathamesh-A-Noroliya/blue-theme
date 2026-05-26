@@ -67,19 +67,20 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 overflow-hidden">
+    <div className="flex h-screen overflow-hidden" style={{ background: "linear-gradient(135deg, #111827 0%, #0b111b 45%, #082f49 100%)" }}>
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 flex flex-col transition-transform duration-300 lg:relative lg:translate-x-0 bg-gradient-to-b from-blue-900 via-blue-800 to-indigo-900 text-white ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed inset-y-0 left-0 z-50 w-64 flex flex-col transition-transform duration-300 lg:relative lg:translate-x-0 text-white ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+        style={{ background: "#0a0f1a", borderRight: "1px solid rgba(77,171,247,0.1)" }}
       >
         {/* Logo */}
-        <div className="flex items-center gap-3 px-5 py-5 border-b border-white/10">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-teal-400">
-            <Shield className="w-4 h-4 text-white" />
+        <div className="flex items-center gap-3 px-5 py-5" style={{ borderBottom: "1px solid rgba(77,171,247,0.1)" }}>
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, #4dabf7, #82cfff)" }}>
+            <Shield className="w-4 h-4 text-[#07111f]" />
           </div>
           <div>
             <div className="font-bold text-white text-sm" style={{ fontFamily: "Sora, sans-serif" }}>RoadIntel</div>
-            <div className="text-xs text-blue-300">{t("pilot_version")}</div>
+            <div className="text-xs" style={{ color: "#4dabf7" }}>{t("pilot_version")}</div>
           </div>
           <button className="ml-auto lg:hidden text-white/80 hover:text-white" onClick={() => setSidebarOpen(false)}>
             <X className="w-5 h-5" />
@@ -90,7 +91,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <nav className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
           {["main", "intel", "emergency", "account"].map(gkey => (
             <div key={gkey}>
-              <div className="px-2 py-1 text-xs font-semibold uppercase tracking-widest text-white/50">
+              <div className="px-2 py-1 text-xs font-semibold uppercase tracking-widest" style={{ color: "#475569" }}>
                 {groupLabels[gkey]}
               </div>
               <div className="space-y-0.5 mt-1">
@@ -100,12 +101,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   return (
                     <Link key={href} href={href}>
                       <div
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-colors text-sm ${active ? "bg-white/20 text-white" : "text-white/70 hover:bg-white/10 hover:text-white"}`}
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all text-sm"
+                        style={{
+                          background: active ? "rgba(77,171,247,0.12)" : "transparent",
+                          color: active ? "#4dabf7" : "#94a3b8",
+                        }}
+                        onMouseEnter={e => { if (!active) (e.currentTarget as HTMLDivElement).style.background = "rgba(77,171,247,0.06)"; (e.currentTarget as HTMLDivElement).style.color = "#cbd5e1"; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = active ? "rgba(77,171,247,0.12)" : "transparent"; (e.currentTarget as HTMLDivElement).style.color = active ? "#4dabf7" : "#94a3b8"; }}
                         onClick={() => setSidebarOpen(false)}
                       >
-                        <Icon className="w-4 h-4 shrink-0" style={key === "nav_sos" ? { color: active ? undefined : "#E53935" } : {}} />
+                        <Icon className="w-4 h-4 shrink-0" style={key === "nav_sos" ? { color: active ? "#4dabf7" : "#ef4444" } : {}} />
                         <span>{t(key)}</span>
-                        {active && !badge && <ChevronRight className="w-3 h-3 ml-auto" />}
+                        {active && !badge && <ChevronRight className="w-3 h-3 ml-auto" style={{ color: "#4dabf7" }} />}
                         {badge && badgeStyle && (
                           <span className="ml-auto text-xs px-1.5 py-0.5 rounded-full font-semibold"
                             style={{ background: badgeStyle.bg, color: badgeStyle.color }}>{badge}</span>
@@ -120,21 +127,21 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </nav>
 
         {/* Language quick picker */}
-        <div className="px-4 py-2 border-t border-white/10">
-          <div className="flex items-center gap-2 text-xs text-white/50">
+        <div className="px-4 py-2" style={{ borderTop: "1px solid rgba(77,171,247,0.1)" }}>
+          <div className="flex items-center gap-2 text-xs" style={{ color: "#475569" }}>
             <Globe className="w-3 h-3" />
             <span>{lang.toUpperCase()}</span>
-            <Link href="/settings"><span className="ml-auto underline cursor-pointer hover:opacity-70">{t("btn_view")}</span></Link>
+            <Link href="/settings"><span className="ml-auto underline cursor-pointer hover:opacity-70" style={{ color: "#4dabf7" }}>{t("btn_view")}</span></Link>
           </div>
         </div>
 
         {/* Bottom info */}
-        <div className="px-4 py-3 border-t border-white/10 space-y-1">
-          <div className="flex items-center gap-2 text-xs text-white/50">
-            <Activity className="w-3 h-3 text-green-400" />
+        <div className="px-4 py-3 space-y-1" style={{ borderTop: "1px solid rgba(77,171,247,0.1)" }}>
+          <div className="flex items-center gap-2 text-xs" style={{ color: "#475569" }}>
+            <Activity className="w-3 h-3" style={{ color: "#22c55e" }} />
             <span>{t("all_systems")}</span>
           </div>
-          <div className="text-xs text-blue-300">{t("pilot_version")}</div>
+          <div className="text-xs" style={{ color: "#4dabf7" }}>{t("pilot_version")}</div>
         </div>
       </aside>
 
@@ -144,23 +151,23 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top bar */}
-        <header className="flex items-center gap-4 px-4 py-3 border-b border-white/10 shrink-0 bg-gradient-to-r from-blue-800 to-indigo-700 text-white">
-          <button className="lg:hidden p-2 rounded-lg hover:bg-white/10 text-white" onClick={() => setSidebarOpen(true)}>
+        <header className="flex items-center gap-4 px-4 py-3 shrink-0 text-white" style={{ background: "#0c1220", borderBottom: "1px solid rgba(77,171,247,0.1)" }}>
+          <button className="lg:hidden p-2 rounded-lg text-white" style={{ background: "rgba(77,171,247,0.08)" }} onClick={() => setSidebarOpen(true)}>
             <Menu className="w-5 h-5" />
           </button>
           <div className="flex-1">
-            <div className="text-xs text-white/70">{t("welcome_back")}, {user.name || "Demo User"}</div>
+            <div className="text-xs" style={{ color: "#64748b" }}>{t("welcome_back")}, <span style={{ color: "#94a3b8" }}>{user.name || "Demo User"}</span></div>
           </div>
           <div className="flex items-center gap-2">
             {/* SOS quick button */}
             <Link href="/sos">
-              <button className="px-3 py-1.5 rounded-xl text-xs font-bold text-white flex items-center gap-1.5 hover:opacity-90 transition-opacity bg-gradient-to-r from-red-500 to-red-700">
+              <button className="px-3 py-1.5 rounded-xl text-xs font-bold text-white flex items-center gap-1.5 transition-opacity hover:opacity-90" style={{ background: "linear-gradient(135deg, #dc2626, #b91c1c)" }}>
                 <Siren className="w-3.5 h-3.5" /> SOS
               </button>
             </Link>
             {/* Notification bell */}
             <div className="relative" ref={notifRef}>
-              <button onClick={() => setNotifOpen(!notifOpen)} className="relative p-2 rounded-lg hover:bg-white/10 text-white">
+              <button onClick={() => setNotifOpen(!notifOpen)} className="relative p-2 rounded-lg transition-colors" style={{ color: "#94a3b8" }}>
                 <Bell className="w-5 h-5" />
                 {unreadCount > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 w-5 h-5 rounded-full text-xs flex items-center justify-center text-white font-bold" style={{ background: "#DC2626" }}>
@@ -198,13 +205,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               )}
             </div>
             {/* User avatar */}
-            <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white bg-teal-400">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-[#07111f]" style={{ background: "linear-gradient(135deg, #4dabf7, #82cfff)" }}>
               {(user.name || "D").charAt(0).toUpperCase()}
             </div>
             {/* Sign Out */}
             <button
               onClick={() => { logout(); setLocation("/login"); }}
-              className="p-2 rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+              className="p-2 rounded-lg transition-colors"
+              style={{ color: "#64748b" }}
               title="Sign Out"
             >
               <LogOut className="w-4 h-4" />
@@ -218,7 +226,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </main>
 
         {/* Footer note */}
-        <footer className="px-4 py-2 text-center text-[10px] text-white/40 border-t border-white/10 bg-gradient-to-r from-blue-800 to-indigo-700">
+        <footer className="px-4 py-2 text-center text-[10px]" style={{ color: "#475569", borderTop: "1px solid rgba(77,171,247,0.1)", background: "#0c1220" }}>
           {t("footer_note")}
         </footer>
       </div>

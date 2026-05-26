@@ -1,0 +1,195 @@
+I want you to update my entire website theme to match the uploaded login page screenshot exactly.
+
+The full website must use the same dark navy/black premium theme from the login page, from login page to dashboard and every internal page. Do not change only one page. Apply the theme globally across all pages, layouts, cards, buttons, forms, tables, charts, modals, sidebars, navbar, settings, notifications, and every component.
+
+Main theme reference:
+- Background should be dark navy/black gradient.
+- Use colors similar to:
+  - Background: #0b111b
+  - Deep navy: #082f49
+  - Card background: #11161f
+  - Card border: #1f2937
+  - Primary blue: #4dabf7
+  - Primary hover: #60b5fa
+  - Text primary: #f8fafc
+  - Text secondary: #94a3b8
+  - Muted text: #64748b
+  - Input background: #0d1117
+  - Success: #22c55e
+  - Warning: #f59e0b
+  - Danger: #ef4444
+
+Use this type of global background:
+background: linear-gradient(135deg, #111827 0%, #0b111b 45%, #082f49 100%);
+
+Cards should look like:
+background: rgba(17, 22, 31, 0.92);
+border: 1px solid rgba(148, 163, 184, 0.12);
+border-radius: 18px;
+box-shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+backdrop-filter: blur(12px);
+
+Primary buttons should look like:
+background: linear-gradient(135deg, #3b9ff3, #66b9ff);
+color: #07111f;
+border-radius: 12px;
+font-weight: 600;
+
+Button hover:
+box-shadow: 0 0 20px rgba(77, 171, 247, 0.35);
+transform: translateY(-1px);
+
+Important tasks:
+
+1. Apply this theme globally using CSS variables or Tailwind theme tokens.
+2. Remove all mismatched light backgrounds, random colors, unreadable text, broken contrast, and inconsistent button styles.
+3. Make sure every page and element follows the same dark blue HydroTrack-style design.
+4. Make the website fully responsive for mobile, tablet, desktop, and large screens.
+5. No page should have horizontal scroll, overlapping elements, broken cards, invisible text, or broken layout.
+
+Also inspect and fix the complete project for stability.
+
+Check all pages and routes. Every linked route must work properly. No page should show:
+- blank screen
+- white screen
+- 404 error
+- runtime error
+- crashed component
+- broken chart
+- broken table
+- broken button
+- module not found
+- undefined is not a function
+- cannot read property of undefined
+
+Make sure these routes work if they exist:
+/
+/login
+/dashboard
+/road
+/risk-map
+/spending
+/complaints
+/sensors
+/contractors
+/settings
+/profile
+/notifications
+
+If any route is linked in the navbar/sidebar but the page does not exist, either create a clean working placeholder page with the same theme or remove the broken link safely.
+
+Vercel deployment requirements:
+
+This is a React/Vite single-page app. Make sure it is fully ready for Vercel deployment.
+
+Create or fix vercel.json in the root folder with this:
+
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+
+Make sure refreshing these pages on Vercel does not give 404:
+/dashboard
+/complaints
+/sensors
+/contractors
+/risk-map
+/spending
+/settings
+
+Fix vite.config.ts if it has Replit-only strict environment variable checks.
+
+If vite.config.ts requires PORT or BASE_PATH like this:
+if (!process.env.PORT) throw new Error(...)
+if (!process.env.BASE_PATH) throw new Error(...)
+
+Remove that strict validation and use safe defaults instead:
+const port = Number(process.env.PORT || 5173);
+const basePath = process.env.BASE_PATH || "/";
+
+The app must not crash on Vercel because of missing PORT, BASE_PATH, or Replit-specific variables.
+
+Functional requirements:
+
+Make sure these buttons work properly:
+- Login button should navigate to dashboard or use existing auth safely.
+- Demo Mode should open dashboard with demo data.
+- Guest Access should open dashboard with guest access.
+- Forgot password should show a clean message or modal if backend is not available.
+- Create Account should open register page or clean modal.
+- Notification bell should open notification dropdown/panel.
+- Settings save profile button should save locally or show success toast.
+- Theme toggle should actually work if present.
+- Language setting should only include English, Hindi, and Marathi.
+
+If language is changed from settings, translate visible UI text as much as possible using a clean translation object:
+const translations = {
+  en: {},
+  hi: {},
+  mr: {}
+};
+
+Remove unsupported languages.
+
+Error handling requirements:
+
+Fix unsafe data access. Avoid code like:
+data.value.name
+
+Use safe access:
+data?.value?.name ?? "N/A"
+
+Charts, tables, cards, maps, and lists should not crash when data is empty. Add clean empty states like:
+"No data available yet"
+
+Code quality requirements:
+- Remove unused imports.
+- Remove duplicate code.
+- Fix broken imports.
+- Use reusable components where possible.
+- Keep styling consistent.
+- Do not add unnecessary heavy packages.
+- Do not break existing functionality.
+- Do not leave false buttons.
+- Do not leave broken navigation.
+- Do not create new deployment problems.
+
+Final verification:
+
+After completing the changes, run:
+npm install
+npm run build
+
+If the project uses pnpm, run:
+pnpm install
+pnpm build
+
+Fix every error until the build succeeds.
+
+Before finishing, verify:
+- Login page loads.
+- Dashboard loads.
+- Every sidebar/navbar route loads.
+- Refresh on dashboard works.
+- Refresh on nested routes works.
+- No blank screen.
+- No runtime crash.
+- No broken elements.
+- No unreadable text.
+- Theme is consistent everywhere.
+- Mobile layout works.
+- Vercel deployment files are correct.
+
+At the end, give me:
+1. Files changed
+2. Theme changes made
+3. Bugs fixed
+4. Build result
+5. Any remaining issue, if any
+
+Do not make partial changes. Complete the full theme migration, fix broken routes/components, and make the project stable and Vercel-ready.

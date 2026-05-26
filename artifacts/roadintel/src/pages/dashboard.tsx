@@ -8,15 +8,15 @@ import { getHealthColor, getRiskColor } from "@/lib/utils";
 
 function StatCard({ label, value, icon: Icon, sub }: { label: string; value: string | number; icon: React.ElementType; sub?: string }) {
   return (
-    <div className="p-5 rounded-2xl bg-slate-800/60 border border-blue-500/20">
+    <div className="p-5 rounded-2xl" style={{ background: "rgba(17,22,31,0.92)", border: "1px solid rgba(148,163,184,0.12)", boxShadow: "0 8px 24px rgba(0,0,0,0.2)" }}>
       <div className="flex items-start justify-between mb-3">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-blue-500/20">
-          <Icon className="w-5 h-5 text-blue-400" />
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(77,171,247,0.12)" }}>
+          <Icon className="w-5 h-5" style={{ color: "#4dabf7" }} />
         </div>
       </div>
-      <div className="text-2xl font-bold mb-0.5 text-white" style={{ fontFamily: "Sora, sans-serif" }}>{value}</div>
-      <div className="text-sm font-medium text-blue-300">{label}</div>
-      {sub && <div className="text-xs mt-1 text-blue-400/70">{sub}</div>}
+      <div className="text-2xl font-bold mb-0.5" style={{ color: "#f8fafc", fontFamily: "Sora, sans-serif" }}>{value}</div>
+      <div className="text-sm font-medium" style={{ color: "#94a3b8" }}>{label}</div>
+      {sub && <div className="text-xs mt-1" style={{ color: "#64748b" }}>{sub}</div>}
     </div>
   );
 }
@@ -53,15 +53,15 @@ export default function Dashboard() {
   return (
     <div className="p-6 space-y-6">
       {/* Header banner */}
-      <div className="p-6 rounded-2xl bg-gradient-to-r from-blue-900 to-slate-800 border border-blue-500/30">
+      <div className="p-6 rounded-2xl" style={{ background: "rgba(17,22,31,0.92)", border: "1px solid rgba(77,171,247,0.15)", boxShadow: "0 18px 45px rgba(0,0,0,0.28)" }}>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <Shield className="w-4 h-4 text-white/70" />
-              <span className="text-xs font-medium text-white/70">{t("pilot_label")}</span>
+              <Shield className="w-4 h-4" style={{ color: "#4dabf7" }} />
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ background: "rgba(77,171,247,0.12)", color: "#4dabf7" }}>{t("pilot_label")}</span>
             </div>
-            <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "Sora, sans-serif" }}>RoadIntel — Pune Road Safety Intelligence Platform</h1>
-            <p className="text-sm mt-1 text-white/70">Pilot Phase | Pune Metropolitan Zone | May 2026</p>
+            <h1 className="text-2xl font-bold" style={{ color: "#f8fafc", fontFamily: "Sora, sans-serif" }}>RoadIntel — Pune Road Safety Intelligence Platform</h1>
+            <p className="text-sm mt-1" style={{ color: "#64748b" }}>Pilot Phase | Pune Metropolitan Zone | May 2026</p>
           </div>
         </div>
       </div>

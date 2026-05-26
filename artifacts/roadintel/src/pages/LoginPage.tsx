@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { Shield, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
@@ -10,6 +10,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [forgotSent, setForgotSent] = useState(false);
 
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +21,7 @@ export default function LoginPage() {
     }
     const ok = login(email, password);
     if (ok) setLocation("/dashboard");
-    else setError("Invalid credentials");
+    else setError("Invalid credentials. Try admin@roadintel.in / demo1234");
   };
 
   const handleGuest = () => {
@@ -28,82 +29,191 @@ export default function LoginPage() {
     setLocation("/dashboard");
   };
 
+  const handleDemo = () => {
+    login("admin@roadintel.in", "demo1234");
+    setLocation("/dashboard");
+  };
+
+  const handleForgot = () => {
+    setForgotSent(true);
+    setTimeout(() => setForgotSent(false), 3000);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-900 via-blue-700 to-indigo-600">
-      <div className="relative w-full max-w-md">
-        <div className="p-8 rounded-2xl bg-slate-800/50 backdrop-blur border border-blue-400/20">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-r from-teal-400 to-blue-400">
-              <Shield className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <div className="font-bold text-white text-xl" style={{ fontFamily: "Sora, sans-serif" }}>RoadIntel</div>
-              <div className="text-xs text-white/60">Pune Road Safety Intelligence Platform</div>
-            </div>
+    <div
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{ background: "linear-gradient(135deg, #111827 0%, #0b111b 45%, #082f49 100%)" }}
+    >
+      {/* subtle glow orbs */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div style={{ position: "absolute", top: "15%", left: "20%", width: 320, height: 320, borderRadius: "50%", background: "radial-gradient(circle, rgba(77,171,247,0.08) 0%, transparent 70%)" }} />
+        <div style={{ position: "absolute", bottom: "20%", right: "15%", width: 260, height: 260, borderRadius: "50%", background: "radial-gradient(circle, rgba(8,47,73,0.5) 0%, transparent 70%)" }} />
+      </div>
+
+      <div className="relative w-full max-w-sm">
+        {/* Logo mark */}
+        <div className="flex flex-col items-center mb-8">
+          <div
+            className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4"
+            style={{ background: "linear-gradient(135deg, #4dabf7, #82cfff)", boxShadow: "0 0 32px rgba(77,171,247,0.35)" }}
+          >
+            <svg viewBox="0 0 24 24" className="w-8 h-8 text-[#07111f]" fill="currentColor">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </div>
+          <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "Sora, sans-serif" }}>Welcome to RoadIntel</h1>
+          <p className="text-sm mt-1" style={{ color: "#94a3b8" }}>Pune Road Safety Intelligence Platform</p>
+        </div>
 
-          <div className="mb-6">
-            <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-white/20 text-white/80">
-              Pilot Phase — May 2026
-            </span>
-          </div>
-
-          <h1 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: "Sora, sans-serif" }}>Sign In</h1>
-          <p className="text-sm text-white/50 mb-6">Access road intelligence and accountability tools.</p>
-
-          <form onSubmit={handleSignIn} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-1.5 text-white/70">Email Address</label>
+        {/* Card */}
+        <div
+          className="rounded-2xl p-8"
+          style={{
+            background: "rgba(17,22,31,0.92)",
+            border: "1px solid rgba(148,163,184,0.12)",
+            boxShadow: "0 18px 45px rgba(0,0,0,0.35)",
+            backdropFilter: "blur(12px)",
+          }}
+        >
+          {/* Form */}
+          <form onSubmit={handleSignIn}>
+          {/* Email field */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2" style={{ color: "#94a3b8" }}>Email Address</label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "#64748b" }} />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="w-full px-4 py-3 rounded-xl text-sm outline-none bg-white/20 border border-white/30 text-white placeholder-white/60 focus:ring-2 focus:ring-white/40"
+                placeholder="admin@roadintel.in"
+                autoComplete="username"
+                className="w-full pl-10 pr-4 py-3 rounded-xl text-sm outline-none transition-all"
+                style={{
+                  background: "#0d1117",
+                  border: "1px solid rgba(148,163,184,0.15)",
+                  color: "#f8fafc",
+                }}
+                onFocus={e => (e.target.style.borderColor = "rgba(77,171,247,0.5)")}
+                onBlur={e => (e.target.style.borderColor = "rgba(148,163,184,0.15)")}
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-1.5 text-white/70">Password</label>
-              <div className="relative">
-                <input
-                  type={show ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter password"
-                  className="w-full px-4 py-3 rounded-xl text-sm outline-none bg-white/20 border border-white/30 text-white placeholder-white/60 focus:ring-2 focus:ring-white/40"
-                />
-                <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/60">
-                  {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-              <div className="flex justify-end mt-2">
-                <span className="text-xs text-white/40">Forgot password?</span>
-              </div>
+          </div>
+
+          {/* Password field */}
+          <div className="mb-2">
+            <label className="block text-sm font-medium mb-2" style={{ color: "#94a3b8" }}>Password</label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "#64748b" }} />
+              <input
+                type={show ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                autoComplete="current-password"
+                className="w-full pl-10 pr-10 py-3 rounded-xl text-sm outline-none transition-all"
+                style={{
+                  background: "#0d1117",
+                  border: "1px solid rgba(148,163,184,0.15)",
+                  color: "#f8fafc",
+                }}
+                onFocus={e => (e.target.style.borderColor = "rgba(77,171,247,0.5)")}
+                onBlur={e => (e.target.style.borderColor = "rgba(148,163,184,0.15)")}
+              />
+              <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 transition-colors" style={{ color: "#64748b" }}>
+                {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
-            {error && <div className="text-xs text-red-300">{error}</div>}
-            <button type="submit" className="w-full py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-white to-blue-100 text-blue-900 hover:from-blue-50 hover:to-blue-200 transition-colors">
-              Sign In
+          </div>
+
+          {/* Forgot password */}
+          <div className="flex justify-end mb-5">
+            <button
+              type="button"
+              onClick={handleForgot}
+              className="text-xs transition-colors"
+              style={{ color: forgotSent ? "#22c55e" : "#4dabf7" }}
+            >
+              {forgotSent ? "Reset link sent to your email" : "Forgot your password?"}
             </button>
+          </div>
+
+          {error && (
+            <div className="mb-4 px-3 py-2 rounded-lg text-xs" style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)", color: "#f87171" }}>
+              {error}
+            </div>
+          )}
+
+          {/* Sign in button */}
+          <button
+            type="submit"
+            className="w-full py-3 rounded-xl text-sm font-semibold transition-all duration-200 mb-4"
+            style={{
+              background: "linear-gradient(135deg, #3b9ff3, #66b9ff)",
+              color: "#07111f",
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 20px rgba(77,171,247,0.35)";
+              (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-1px)";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
+              (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
+            }}
+          >
+            Sign In to Dashboard
+          </button>
           </form>
 
-          <div className="relative my-5">
-            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/20" /></div>
-            <div className="relative flex justify-center"><span className="px-3 text-xs text-white/40 bg-transparent">or</span></div>
+          {/* Divider */}
+          <div className="relative my-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full" style={{ borderTop: "1px solid rgba(148,163,184,0.12)" }} />
+            </div>
+            <div className="relative flex justify-center">
+              <span className="px-3 text-xs" style={{ background: "rgba(17,22,31,0.92)", color: "#64748b" }}>OR CONTINUE WITH</span>
+            </div>
           </div>
 
-          <button onClick={handleGuest} className="w-full py-3 rounded-xl text-sm font-semibold border border-white/50 text-white hover:bg-white/10 transition-colors">
-            Continue as Guest
-          </button>
-
-          <div className="mt-5 text-center">
-            <p className="text-xs text-white/30">Demo: admin@roadintel.in / demo1234</p>
+          {/* Demo Mode + Guest Access */}
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              onClick={handleDemo}
+              className="py-2.5 rounded-xl text-sm font-semibold transition-all duration-200"
+              style={{
+                background: "rgba(77,171,247,0.08)",
+                border: "1px solid rgba(77,171,247,0.2)",
+                color: "#f8fafc",
+              }}
+              onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = "rgba(77,171,247,0.15)")}
+              onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = "rgba(77,171,247,0.08)")}
+            >
+              Demo Mode
+            </button>
+            <button
+              onClick={handleGuest}
+              className="py-2.5 rounded-xl text-sm font-semibold transition-all duration-200"
+              style={{
+                background: "rgba(77,171,247,0.08)",
+                border: "1px solid rgba(77,171,247,0.2)",
+                color: "#f8fafc",
+              }}
+              onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = "rgba(77,171,247,0.15)")}
+              onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = "rgba(77,171,247,0.08)")}
+            >
+              Guest Access
+            </button>
           </div>
 
-          <p className="text-center text-sm mt-4 text-white/40">
+          <p className="text-center text-sm mt-5" style={{ color: "#64748b" }}>
             Don't have an account?{" "}
-            <span className="cursor-pointer text-teal-300 hover:text-teal-200">Create account</span>
+            <span className="cursor-pointer font-medium" style={{ color: "#4dabf7" }}>Create Account</span>
           </p>
         </div>
+
+        <p className="text-center text-xs mt-4" style={{ color: "#475569" }}>
+          RoadIntel Pilot — Maharashtra Road Safety Initiative
+        </p>
       </div>
     </div>
   );
