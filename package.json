@@ -5,10 +5,10 @@
   "private": true,
   "packageManager": "pnpm@10.0.0",
   "scripts": {
-    "build": "pnpm run typecheck && pnpm -r --if-present run build",
-    "build:roadintel": "pnpm --filter @workspace/roadintel build",
+    "build": "pnpm --dir artifacts/roadintel build",
+    "build:roadintel": "pnpm --dir artifacts/roadintel build",
     "typecheck:libs": "tsc --build",
-    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck"
+    "typecheck": "pnpm --dir artifacts/roadintel typecheck"
   },
   "devDependencies": {
     "prettier": "^3.8.1",

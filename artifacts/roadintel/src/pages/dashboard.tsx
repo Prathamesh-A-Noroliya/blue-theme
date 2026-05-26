@@ -39,7 +39,7 @@ type DashboardSummary = {
 
 type ActivityItem = {
   id: string | number;
-  message: string;
+  message?: string;
   location?: string;
   timestamp?: string;
   severity?: string;
@@ -48,7 +48,7 @@ type ActivityItem = {
 
 type NotificationItem = {
   id: string | number;
-  title: string;
+  title?: string;
   message?: string;
   read?: boolean;
   severity?: string;
@@ -56,7 +56,7 @@ type NotificationItem = {
 
 type InsightItem = {
   id: string | number;
-  title: string;
+  title?: string;
   description?: string;
   severity?: string;
   confidence?: number;
@@ -358,9 +358,7 @@ export default function Dashboard() {
 
   const notifications = useMemo<NotificationItem[]>(() => {
     const safeNotifications = toArray<NotificationItem>(notificationsData);
-    return safeNotifications.length > 0
-      ? safeNotifications
-      : PUNE_NOTIFICATIONS;
+    return safeNotifications.length > 0 ? safeNotifications : PUNE_NOTIFICATIONS;
   }, [notificationsData]);
 
   const insights = useMemo<InsightItem[]>(() => {
@@ -369,7 +367,9 @@ export default function Dashboard() {
   }, [insightsData]);
 
   const unreadNotificationCount = useMemo(() => {
-    return notifications.filter((notification) => !notification.read).length;
+    return toArray<NotificationItem>(notifications).filter(
+      (notification) => !notification.read,
+    ).length;
   }, [notifications]);
 
   const stats = useMemo(
@@ -510,28 +510,30 @@ export default function Dashboard() {
         </h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-          {QUICK_ACTIONS.map(({ labelKey, fallbackLabel, href, icon: Icon, color }) => (
-            <Link key={href} href={href}>
-              <div
-                className="p-4 rounded-xl text-center hover:scale-105 transition-transform cursor-pointer"
-                style={{
-                  background: "hsl(var(--card))",
-                  border: "1px solid hsl(var(--border))",
-                }}
-              >
+          {QUICK_ACTIONS.map(
+            ({ labelKey, fallbackLabel, href, icon: Icon, color }) => (
+              <Link key={href} href={href}>
                 <div
-                  className="w-10 h-10 rounded-xl mx-auto mb-2 flex items-center justify-center"
-                  style={{ background: `${color}15` }}
+                  className="p-4 rounded-xl text-center hover:scale-105 transition-transform cursor-pointer"
+                  style={{
+                    background: "hsl(var(--card))",
+                    border: "1px solid hsl(var(--border))",
+                  }}
                 >
-                  <Icon className="w-5 h-5" style={{ color }} />
-                </div>
+                  <div
+                    className="w-10 h-10 rounded-xl mx-auto mb-2 flex items-center justify-center"
+                    style={{ background: `${color}15` }}
+                  >
+                    <Icon className="w-5 h-5" style={{ color }} />
+                  </div>
 
-                <div className="text-xs font-medium">
-                  {t(labelKey) || fallbackLabel}
+                  <div className="text-xs font-medium">
+                    {t(labelKey) || fallbackLabel}
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ),
+          )}
         </div>
       </div>
 
@@ -547,7 +549,10 @@ export default function Dashboard() {
             className="flex items-center justify-between px-5 py-4 border-b"
             style={{ borderColor: "hsl(var(--border))" }}
           >
-            <h3 className="font-semibold" style={{ fontFamily: "Sora, sans-serif" }}>
+            <h3
+              className="font-semibold"
+              style={{ fontFamily: "Sora, sans-serif" }}
+            >
               Recent Activity
             </h3>
 
@@ -563,39 +568,45 @@ export default function Dashboard() {
           </div>
 
           <div className="divide-y" style={{ borderColor: "hsl(var(--border))" }}>
-            {activity.length > 0 ? (
-              activity.slice(0, 6).map((item) => {
-                const severityColor = getSeverityColor(item.severity);
+            {toArray<ActivityItem>(activity).length > 0 ? (
+              toArray<ActivityItem>(activity)
+                .slice(0, 6)
+                .map((item) => {
+                  const severityColor = getSeverityColor(item.severity);
 
-                return (
-                  <div key={item.id} className="flex items-start gap-3 px-5 py-3">
+                  return (
                     <div
-                      className="w-2 h-2 rounded-full mt-2 shrink-0"
-                      style={{ background: severityColor }}
-                    />
-
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium truncate">
-                        {item.message || "RoadWatch activity update"}
-                      </div>
-
-                      <div className="text-xs text-muted-foreground">
-                        {item.location || "Pune"} · {item.timestamp || "Recently"}
-                      </div>
-                    </div>
-
-                    <span
-                      className="text-xs px-2 py-0.5 rounded-full shrink-0"
-                      style={{
-                        background: getSoftSeverityBg(item.severity),
-                        color: severityColor,
-                      }}
+                      key={item.id}
+                      className="flex items-start gap-3 px-5 py-3"
                     >
-                      {item.severity || "info"}
-                    </span>
-                  </div>
-                );
-              })
+                      <div
+                        className="w-2 h-2 rounded-full mt-2 shrink-0"
+                        style={{ background: severityColor }}
+                      />
+
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium truncate">
+                          {item.message || "RoadWatch activity update"}
+                        </div>
+
+                        <div className="text-xs text-muted-foreground">
+                          {item.location || "Pune"} ·{" "}
+                          {item.timestamp || "Recently"}
+                        </div>
+                      </div>
+
+                      <span
+                        className="text-xs px-2 py-0.5 rounded-full shrink-0"
+                        style={{
+                          background: getSoftSeverityBg(item.severity),
+                          color: severityColor,
+                        }}
+                      >
+                        {item.severity || "info"}
+                      </span>
+                    </div>
+                  );
+                })
             ) : (
               <div className="px-5 py-6 text-sm text-muted-foreground">
                 No recent activity available.
@@ -618,7 +629,10 @@ export default function Dashboard() {
             >
               <Bell className="w-4 h-4" />
 
-              <h3 className="font-semibold" style={{ fontFamily: "Sora, sans-serif" }}>
+              <h3
+                className="font-semibold"
+                style={{ fontFamily: "Sora, sans-serif" }}
+              >
                 Notifications
               </h3>
 
@@ -633,30 +647,34 @@ export default function Dashboard() {
             </div>
 
             <div className="divide-y" style={{ borderColor: "hsl(var(--border))" }}>
-              {notifications.length > 0 ? (
-                notifications.slice(0, 4).map((notification) => {
-                  const severityColor = getSeverityColor(notification.severity);
+              {toArray<NotificationItem>(notifications).length > 0 ? (
+                toArray<NotificationItem>(notifications)
+                  .slice(0, 4)
+                  .map((notification) => {
+                    const severityColor = getSeverityColor(
+                      notification.severity,
+                    );
 
-                  return (
-                    <div key={notification.id} className="px-5 py-3">
-                      <div
-                        className={`text-xs font-medium flex items-center gap-1.5 ${
-                          notification.read ? "opacity-60" : ""
-                        }`}
-                      >
-                        <span
-                          className="w-1.5 h-1.5 rounded-full"
-                          style={{ background: severityColor }}
-                        />
-                        {notification.title || "RoadWatch notification"}
-                      </div>
+                    return (
+                      <div key={notification.id} className="px-5 py-3">
+                        <div
+                          className={`text-xs font-medium flex items-center gap-1.5 ${
+                            notification.read ? "opacity-60" : ""
+                          }`}
+                        >
+                          <span
+                            className="w-1.5 h-1.5 rounded-full"
+                            style={{ background: severityColor }}
+                          />
+                          {notification.title || "RoadWatch notification"}
+                        </div>
 
-                      <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
-                        {notification.message || "No message available"}
+                        <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                          {notification.message || "No message available"}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })
+                    );
+                  })
               ) : (
                 <div className="px-5 py-6 text-sm text-muted-foreground">
                   No notifications available.
@@ -676,7 +694,10 @@ export default function Dashboard() {
               className="flex items-center justify-between px-5 py-4 border-b"
               style={{ borderColor: "hsl(var(--border))" }}
             >
-              <h3 className="font-semibold" style={{ fontFamily: "Sora, sans-serif" }}>
+              <h3
+                className="font-semibold"
+                style={{ fontFamily: "Sora, sans-serif" }}
+              >
                 AI Insights
               </h3>
 
@@ -692,44 +713,49 @@ export default function Dashboard() {
             </div>
 
             <div className="p-4 space-y-3">
-              {insights.length > 0 ? (
-                insights.slice(0, 3).map((insight) => {
-                  const severityColor = getSeverityColor(insight.severity);
+              {toArray<InsightItem>(insights).length > 0 ? (
+                toArray<InsightItem>(insights)
+                  .slice(0, 3)
+                  .map((insight) => {
+                    const severityColor = getSeverityColor(insight.severity);
 
-                  return (
-                    <div
-                      key={insight.id}
-                      className="p-3 rounded-xl"
-                      style={{ background: "hsl(var(--muted))" }}
-                    >
-                      <div className="text-xs font-semibold mb-1">
-                        {insight.title || "RoadWatch insight"}
-                      </div>
-
-                      <div className="text-xs text-muted-foreground line-clamp-2">
-                        {insight.description || "No insight description available."}
-                      </div>
-
-                      <div className="flex items-center gap-2 mt-2">
-                        <div
-                          className="text-xs px-1.5 py-0.5 rounded"
-                          style={{
-                            background: getSoftSeverityBg(insight.severity),
-                            color: severityColor,
-                          }}
-                        >
-                          {insight.severity || "info"}
+                    return (
+                      <div
+                        key={insight.id}
+                        className="p-3 rounded-xl"
+                        style={{ background: "hsl(var(--muted))" }}
+                      >
+                        <div className="text-xs font-semibold mb-1">
+                          {insight.title || "RoadWatch insight"}
                         </div>
 
-                        <div className="text-xs text-muted-foreground">
-                          {typeof insight.confidence === "number"
-                            ? `${(insight.confidence * 100).toFixed(0)}% confidence`
-                            : ""}
+                        <div className="text-xs text-muted-foreground line-clamp-2">
+                          {insight.description ||
+                            "No insight description available."}
+                        </div>
+
+                        <div className="flex items-center gap-2 mt-2">
+                          <div
+                            className="text-xs px-1.5 py-0.5 rounded"
+                            style={{
+                              background: getSoftSeverityBg(insight.severity),
+                              color: severityColor,
+                            }}
+                          >
+                            {insight.severity || "info"}
+                          </div>
+
+                          <div className="text-xs text-muted-foreground">
+                            {typeof insight.confidence === "number"
+                              ? `${(insight.confidence * 100).toFixed(
+                                  0,
+                                )}% confidence`
+                              : ""}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })
+                    );
+                  })
               ) : (
                 <div className="text-sm text-muted-foreground">
                   No AI insights available.
