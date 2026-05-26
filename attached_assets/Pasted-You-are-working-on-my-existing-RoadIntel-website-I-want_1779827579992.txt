@@ -1,0 +1,339 @@
+You are working on my existing RoadIntel website. I want to prepare it strictly according to the hackathon problem statement: ROADWATCH 1.2.
+
+IMPORTANT CREDIT LIMIT INSTRUCTION:
+Use a minimal-change strategy. Do not rewrite the entire project. Do not redesign from scratch. Do not create unnecessary new components or pages. First inspect the existing structure, reuse existing components, and only modify what is required. Try to complete this within about 50% of the free daily Replit AI Agent credit limit.
+
+Main goal:
+Convert/improve the website so it clearly matches the ROADWATCH 1.2 problem statement.
+
+ROADWATCH 1.2 requirement summary:
+RoadWatch is an AI-powered platform/chatbot that enables citizens to monitor road quality, track public spending, and report issues to responsible authorities. The goal is to improve transparency and accountability in road infrastructure.
+
+The platform should help users see:
+1. Road type: NH / SH / MDR / city road / rural road
+2. Last relaying or repair date
+3. Contractor name
+4. Amount sanctioned
+5. Amount spent
+6. Maintenance schedule
+7. Repair history
+8. Complaint routing to correct Executive Engineer / authority
+9. Road quality reports
+10. Public accountability and transparency information
+11. Offline or low-network friendly behavior where possible
+12. Clean, accessible, easy-to-understand interface
+
+Evaluation criteria to satisfy:
+1. Data accuracy
+2. Complaint routing mechanism
+3. Budget transparency including source
+4. User interface and accessibility
+5. Information integration
+
+STRICT DEVELOPMENT RULES:
+- Do not break existing pages.
+- Do not remove working routes.
+- Do not add heavy packages unless absolutely required.
+- Do not create fake buttons.
+- Every visible button must either work or show a clean message/modal.
+- Do not leave blank pages.
+- Do not create TypeScript/build errors.
+- Keep the existing dark blue theme consistent across the website.
+- Keep the project Vercel-ready.
+
+Step 1: Inspect first
+Before editing, inspect:
+- package.json
+- vite.config.ts
+- vercel.json
+- src/App.tsx
+- routing files
+- layout/sidebar/navbar files
+- all pages under src/pages
+- shared components under src/components
+- global CSS/Tailwind files
+
+Then make only targeted changes.
+
+Step 2: ROADWATCH content alignment
+Update the website copy, dashboard labels, cards, and page sections so the project clearly communicates ROADWATCH.
+
+Use these names and sections where suitable:
+- RoadWatch Dashboard
+- Road Quality Monitor
+- Public Spending Tracker
+- Complaint Routing
+- Contractor Accountability
+- Road Repair History
+- Budget Transparency
+- Authority Directory
+- Citizen Reports
+- Road Risk & Maintenance Insights
+
+Remove unrelated HydroTrack/agriculture/water content if it exists. Replace it with RoadWatch road-infrastructure content.
+
+Step 3: Required pages/routes
+Ensure these routes work if they already exist or are linked in navbar/sidebar:
+
+/
+/login
+/dashboard
+/road
+/risk-map
+/spending
+/complaints
+/sensors
+/contractors
+/settings
+/profile
+/notifications
+
+If a route is linked but missing, create a simple working page using existing layout and theme. Do not create complex pages. Use clean cards and realistic demo data.
+
+Step 4: Dashboard requirements
+Improve the dashboard so it shows RoadWatch-related KPIs.
+
+Add or update cards like:
+- Roads Monitored
+- Active Complaints
+- Avg Road Quality Score
+- Budget Utilization
+- Pending Repairs
+- Contractors Tracked
+- High-Risk Segments
+- Complaints Routed Successfully
+
+Use realistic Maharashtra/Pune-focused demo data, for example:
+- Pune Municipal roads
+- Maharashtra State Highway
+- MDR roads
+- NH road segments around Pune
+- Public Works Department / PMC / NHAI type authorities
+
+Keep the data lightweight. Do not add huge datasets.
+
+Step 5: Road information page
+Create or update a road details/list page.
+
+Each road record should include:
+- Road name
+- Location
+- Road type: NH / SH / MDR / city road
+- Responsible authority
+- Contractor name
+- Last repair/relaying date
+- Next maintenance due date
+- Quality score
+- Complaint count
+- Amount sanctioned
+- Amount spent
+- Status: Good / Needs Repair / Critical
+
+Add empty-state safety so the page does not crash if data is missing.
+
+Step 6: Public spending page
+Create or update the spending/budget page.
+
+It should show:
+- Total amount sanctioned
+- Amount spent
+- Remaining amount
+- Budget utilization percentage
+- Source department or authority
+- Contractor linked to each project
+- Road/project name
+- Work status
+
+Use clear cards/tables/charts only if existing chart components are already available. Do not install new chart libraries unless the project already uses charts.
+
+Step 7: Complaints page
+Create or update complaints workflow.
+
+Complaint form fields:
+- Citizen name or anonymous option
+- Road/location
+- Issue type: pothole, damaged road, waterlogging, missing sign, unsafe patch, poor repair quality
+- Description
+- Severity: low / medium / high / critical
+- Upload placeholder if existing upload component exists, otherwise skip upload
+- Submit button
+
+After submit:
+- Show success toast/message
+- Generate a complaint ID
+- Route complaint to correct authority based on road type/location
+
+Routing logic example:
+- NH -> NHAI / National Highway Authority
+- SH -> Maharashtra PWD
+- MDR -> District PWD
+- City Road Pune -> Pune Municipal Corporation Road Department
+- Unknown -> Local Road Authority
+
+Do this client-side only if backend is not available. Store demo complaint locally in localStorage if easy.
+
+Step 8: Complaint routing mechanism
+Add a simple complaint routing utility if no backend exists.
+
+Example logic:
+function getResponsibleAuthority(roadType, location) {
+  if roadType is NH return "NHAI Regional Office";
+  if roadType is SH return "Maharashtra PWD";
+  if roadType is MDR return "District PWD";
+  if location includes Pune return "Pune Municipal Corporation Road Department";
+  return "Local Road Authority";
+}
+
+Use safe code and avoid crashes.
+
+Step 9: Contractors page
+Create or update contractors page.
+
+Each contractor card/table row should show:
+- Contractor name
+- Linked road/project
+- Contract amount
+- Work status
+- Quality rating
+- Delay status
+- Complaints linked
+- Last maintenance date
+
+This page should make contractor accountability clear.
+
+Step 10: Risk map / road quality page
+If a map already exists, keep it and style it. If there is no real map, do not add heavy map packages.
+
+Instead create a clean “Risk Segments” page with:
+- Road segment
+- Location
+- Risk level
+- Issue count
+- Quality score
+- Last inspection date
+- Recommended action
+
+Use color-coded badges:
+- Good
+- Moderate
+- High Risk
+- Critical
+
+Step 11: Sensors page
+If the project has a sensors page, repurpose it for RoadWatch monitoring inputs.
+
+It can show:
+- Citizen reports
+- Inspection data
+- Road quality score
+- Complaint trend
+- Maintenance status
+- Low-network cached status
+
+Do not make it look like an unrelated IoT agriculture page.
+
+Step 12: AI chatbot / assistant section
+If there is already a chatbot or assistant UI, rename it to RoadWatch Assistant.
+
+It should help users ask:
+- Who is responsible for this road?
+- When was this road repaired?
+- How much budget was sanctioned?
+- Where should I report a pothole?
+- What is the complaint status?
+
+If there is no chatbot, add only a simple static assistant card or lightweight mock input. Do not build a complex AI system.
+
+Step 13: Theme consistency
+Keep the entire website in the existing dark blue premium theme.
+
+Use:
+- Dark navy gradient backgrounds
+- Dark cards
+- Blue accent buttons
+- Light text
+- Muted secondary text
+- Clean borders
+- No white broken sections
+- No unreadable contrast
+
+Make sure all pages look like one product.
+
+Step 14: Mobile responsiveness
+Fix layout issues for mobile:
+- No horizontal overflow
+- Cards stack properly
+- Tables scroll horizontally or become compact
+- Navbar/sidebar should not cover content
+- Buttons should be tappable
+- Text should not overlap
+
+Step 15: Accessibility
+Improve:
+- Button labels
+- Input labels
+- Contrast
+- Focus states
+- Semantic headings
+- Alt text if images exist
+
+Step 16: Vercel readiness
+Make sure the project is deployable on Vercel.
+
+Check vercel.json. If missing or incorrect, use:
+
+{
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+
+Make sure vite.config.ts does not crash because of missing Replit-only environment variables.
+
+If PORT or BASE_PATH are required strictly, replace with safe defaults:
+const port = Number(process.env.PORT || 5173);
+const basePath = process.env.BASE_PATH || "/";
+
+Step 17: Error handling
+Fix unsafe access patterns.
+
+Avoid:
+data.value.name
+
+Use:
+data?.value?.name ?? "N/A"
+
+Every table/list/chart/card must handle empty data without crashing.
+
+Add simple empty states:
+- "No complaints found"
+- "No road data available"
+- "No contractor records available"
+
+Step 18: Build check
+After changes, run the correct build command.
+
+First check package.json to see package manager.
+
+Run one of:
+npm run build
+
+or:
+pnpm build
+
+Fix all build errors before finishing.
+
+Step 19: Final output required
+After finishing, tell me:
+1. Files changed
+2. ROADWATCH features added or improved
+3. Broken routes/components fixed
+4. Vercel deployment fixes made
+5. Build result
+6. Any remaining issue, if any
+
+Very important:
+Do not do a full unnecessary rewrite. Use minimal targeted edits. Focus on ROADWATCH alignment, working routes, clean UI, correct complaint routing, budget transparency, road/contractor data, and successful Vercel build.
